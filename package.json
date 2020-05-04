@@ -1,7 +1,7 @@
 {
   "name": "thisorthat",
   "version": "1.0.0",
-  "description": "Um bot de Discord que apresenta duas opções que são escolhidas pelos integrandes do servidor",
+  "description": "Um bot de Discord que apresenta duas opções que são escolhidas pelos integrantes do servidor",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
