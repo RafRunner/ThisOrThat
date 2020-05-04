@@ -1,7 +1,8 @@
 'use strict';
 
-const teste = require('./teste');
+const newQuestion = require('./newQuestion');
+const listQuestions = require('./listQuestions');
 
-const todosOsComandos = [teste];
+const todosOsComandos = [newQuestion, listQuestions];
 
 module.exports = todosOsComandos;

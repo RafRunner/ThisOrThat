@@ -10,7 +10,7 @@ class Comando {
 
   executarSeMatch(textoMensagemNormalizado, msg) {
     if (this.funcaoMatch(textoMensagemNormalizado)) {
-      this.funcaoExecuta(msg);
+      this.funcaoExecuta(msg, textoMensagemNormalizado);
       return true;
     }
     return false;

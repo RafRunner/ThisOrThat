@@ -4,11 +4,16 @@
   "description": "Um bot de Discord que apresenta duas opções que são escolhidas pelos integrantes do servidor",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "author": "Rafael Nunes Santana",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^12.2.0"
+    "discord.js": "^12.2.0",
+    "knex": "^0.21.1",
+    "sqlite3": "^4.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
   }
 }
