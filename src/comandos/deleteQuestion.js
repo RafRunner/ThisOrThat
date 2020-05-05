@@ -6,14 +6,14 @@ const PerguntaController = require('../controllers/PerguntaController');
 const util = require('../util');
 
 const deleteQuestion = new Comando(
-  (textoMensagem) => util.textoComecaComComando(textoMensagem, 'deleteQuestion', 'dq'),
+  (textoMensagem) => util.textoComecaComComando(textoMensagem, 'deletequestion', 'dq'),
 
   async (msg, textoMensagem) => {
     const pattrid = /\d+/g;
     const id = pattrid.exec(textoMensagem);
 
     if (!id) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro('Uso incorreto do comando! Para instruções use ' + prefixo + 'help'));
+      msg.channel.send(util.criaMensagemEmbarcadaErro(`Uso incorreto do comando! Uso: ${prefixo}dq id_da_pergunta`));
       return;
     }
 
@@ -23,7 +23,7 @@ const deleteQuestion = new Comando(
 
   'deleteQuestion (ou dq)',
 
-  `Comando para deletar uma pergunta. Deve ser seguido do id da pergunta. Para ver os ids e as perguntas use ${prefixo}listQuestion.\nUso: ${prefixo}deleteQuestion 13`
+  `Comando para deletar uma pergunta. Deve ser seguido do id da pergunta. Para ver os ids e as perguntas use ${prefixo}listQuestion.\nUso: ${prefixo}deleteQuestion id_da_pergunta`
 );
 
 module.exports = deleteQuestion;

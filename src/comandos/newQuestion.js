@@ -6,17 +6,17 @@ const PerguntaController = require('../controllers/PerguntaController');
 const util = require('../util');
 
 const newQuestion = new Comando(
-  (textoMensagem) => util.textoComecaComComando(textoMensagem, 'newQuestion', 'nq'),
+  (textoMensagem) => util.textoComecaComComando(textoMensagem, 'newquestion', 'nq'),
 
-  async (msg, textoMensagemNormalizado) => {
+  async (msg, textoMensagem) => {
     const pattrPrimeira = /(?<=1-).+(?=2-)/g;
     const pattrSegunda = /(?<=2-).+/g;
 
-    const primeiraOpcao = pattrPrimeira.exec(textoMensagemNormalizado);
-    const segundaOpcao = pattrSegunda.exec(textoMensagemNormalizado);
+    const primeiraOpcao = pattrPrimeira.exec(textoMensagem);
+    const segundaOpcao = pattrSegunda.exec(textoMensagem);
 
     if (!primeiraOpcao || !segundaOpcao) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro('Uso incorreto do comando! Para instruções use ' + prefixo + 'help'));
+      msg.channel.send(util.criaMensagemEmbarcadaErro(`Uso incorreto do comando! Uso: ${prefixo}nq 1- primeira opção 2- segunda opção`));
       return;
     }
 
@@ -26,7 +26,7 @@ const newQuestion = new Comando(
 
   'newQuestion (ou nq)',
 
-  `Comando para criar uma nova pergunta. As opções devem ser escritas em uma linha e no máximo 255 caracteres.\nUso: ${prefixo}newQuestion 1- Coca cola 2- Pepsi`
+  `Comando para criar uma nova pergunta. As opções devem ser escritas em uma linha e no máximo 255 caracteres.\nUso: ${prefixo}newQuestion 1- primeira opção 2- segunda opção`
 );
 
 module.exports = newQuestion;

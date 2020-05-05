@@ -3,7 +3,8 @@
 const newQuestion = require('./newQuestion');
 const listQuestions = require('./listQuestions');
 const deleteQuestion = require('./deleteQuestion');
+const question = require('./question');
 
-const todosOsComandos = [newQuestion, listQuestions, deleteQuestion];
+const todosOsComandos = [question, newQuestion, listQuestions, deleteQuestion];
 
 module.exports = todosOsComandos;

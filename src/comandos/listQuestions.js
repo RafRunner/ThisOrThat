@@ -26,7 +26,7 @@ const listQuestions = new Comando(
 
   'listQuestions (ou lq)',
 
-  `Comando para listar todas as perguntas. Uso somente para desenvolvimento, não será para sempre.`
+  `Comando para listar todas as perguntas.`
 );
 
 module.exports = listQuestions;

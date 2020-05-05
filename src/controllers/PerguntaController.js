@@ -14,6 +14,29 @@ module.exports = {
     }
   },
 
+  async get(id) {
+    try {
+      const pergunta = await connection('pergunta').where('id', id).first();
+
+      return { sucesso: true, pergunta: pergunta };
+    } catch {
+      return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar as perguntas...' };
+    }
+  },
+
+  async getRandonQuestion() {
+    try {
+      const [count] = await connection('pergunta').count();
+      const numeroSelecionado = Math.floor(Math.random() * count['count(*)']);
+
+      const perguntaSelecionada = await connection('pergunta').orderBy('id').offset(numeroSelecionado).first();
+
+      return { sucesso: true, pergunta: perguntaSelecionada };
+    } catch {
+      return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar as perguntas...' };
+    }
+  },
+
   async create(primeiraOpcao, segundaOpcao) {
     if (primeiraOpcao.length > 255 || segundaOpcao.length > 255) {
       return { sucesso: false, mensagem: 'As opções devem ter no máximo 255 caracteres!' };
@@ -28,6 +51,19 @@ module.exports = {
       return { sucesso: true, mensagem: 'Pergunta criada com sucesso!' };
     } catch {
       return { sucesso: false, mensagem: 'Ocorreu um erro ao salvar a pergunta... Tente novamente mais tarde!' };
+    }
+  },
+
+  async updateVotos(pergunta, novoTotalUm, novoTotalDois) {
+    try {
+      await connection('pergunta').where('id', pergunta.id).update({
+        votos_opcao_um: novoTotalUm,
+        votos_opcao_dois: novoTotalDois,
+      });
+
+      return { sucesso: true, mensagem: 'Pegunta atualizada com sucesso!' };
+    } catch {
+      return { sucesso: false, mensagem: 'Ocorreu um erro ao atualizar a pergunta...' };
     }
   },
 
