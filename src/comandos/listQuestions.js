@@ -2,27 +2,29 @@
 
 const Comando = require('./Comando');
 const PerguntaController = require('../controllers/PerguntaController');
+const util = require('../util');
 
 function montaTextoPerguntas(perguntas) {
-  const reducer = (acumulador, pergunta) => acumulador + 'Você prefere' + pergunta.opcao_um + ' ou ' + pergunta.opcao_dois + '\n';
+  const reducer = (acumulador, pergunta) =>
+    acumulador + '**Id: ' + pergunta.id + " - Você prefere '" + pergunta.opcao_um + "' ou '" + pergunta.opcao_dois + "'?**\n";
   return perguntas.reduce(reducer, '');
 }
 
 const listQuestions = new Comando(
-  textoMensagemNormalizado => textoMensagemNormalizado === 'listQuestions' || textoMensagemNormalizado === 'lq',
+  (textoMensagem) => util.textoEhComando(textoMensagem, 'listquestions', 'lq'),
 
-  async (msg, textoMensagemNormalizado) => {
-    const perguntas = await PerguntaController.index();
-    if (perguntas.sucesso) {
-      const textoPerguntas = montaTextoPerguntas(perguntas.perguntas);
+  async (msg, textoMensagem) => {
+    const resposta = await PerguntaController.index();
+    if (resposta.sucesso) {
+      const textoPerguntas = montaTextoPerguntas(resposta.perguntas);
 
-      msg.channel.send('Perguntas:\n' + textoPerguntas);
+      msg.channel.send(util.criaMensagemEmbarcada('Perguntas:', textoPerguntas));
       return;
     }
-    msg.channel.send(perguntas.mensagem);
+    msg.channel.send(util.criaMensagemEmbarcadaErro(resposta.mensagem));
   },
 
-  'listQuestions(lq)',
+  'listQuestions (ou lq)',
 
   `Comando para listar todas as perguntas. Uso somente para desenvolvimento, não será para sempre.`
 );

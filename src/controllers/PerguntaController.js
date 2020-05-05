@@ -3,7 +3,7 @@
 const connection = require('../database/connection');
 
 module.exports = {
-  // Aqui puramente por motivos de debug. TODO deletar mais tarde
+  // TODO No futuro deve retornar somente as perguntas do servidor
   async index() {
     try {
       const perguntas = await connection('pergunta').select('*');
@@ -22,12 +22,27 @@ module.exports = {
     try {
       await connection('pergunta').insert({
         opcao_um: primeiraOpcao,
-        opcao_dois: segundaOpcao
+        opcao_dois: segundaOpcao,
       });
 
       return { sucesso: true, mensagem: 'Pergunta criada com sucesso!' };
     } catch {
       return { sucesso: false, mensagem: 'Ocorreu um erro ao salvar a pergunta... Tente novamente mais tarde!' };
     }
-  }
+  },
+
+  async delete(id) {
+    try {
+      const pergunta = await connection('pergunta').where('id', id).select('id').first();
+      if (!pergunta) {
+        return { sucesso: false, mensagem: 'Essa pergunta não existe!' };
+      }
+
+      await connection('pergunta').where('id', id).delete();
+
+      return { sucesso: true, mensagem: 'Pergunta deletada com sucesso!' };
+    } catch {
+      return { sucesso: false, mensagem: 'Ocorreu um erro ao deletar a pergunta... Tente novamente mais tarde!' };
+    }
+  },
 };

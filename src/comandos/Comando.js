@@ -8,9 +8,9 @@ class Comando {
     this.nome = nome;
   }
 
-  executarSeMatch(textoMensagemNormalizado, msg) {
-    if (this.funcaoMatch(textoMensagemNormalizado)) {
-      this.funcaoExecuta(msg, textoMensagemNormalizado);
+  executarSeMatch(textoMensagem, msg) {
+    if (this.funcaoMatch(textoMensagem)) {
+      this.funcaoExecuta(msg, textoMensagem);
       return true;
     }
     return false;

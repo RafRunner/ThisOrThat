@@ -1,6 +1,5 @@
 'use strict';
 
-const Discord = require('discord.js');
 const comandos = require('./comandos/todosOsComandos');
 const { prefixo } = require('./constantes');
 const util = require('./util');
@@ -10,24 +9,24 @@ function respostaHandler(msg) {
     return;
   }
 
-  const textoMensagemNormalizado = msg.content.substring(1).trim();
+  const textoMensagem = msg.content.substring(1).trim();
 
-  if (textoMensagemNormalizado === 'help') {
+  if (textoMensagem === 'help') {
     const embed = util.criaMensagemEmbarcada('Como Usar o Bot:', montaMensagemHelp(comandos));
     msg.channel.send(embed);
     return;
   }
 
-  comandos.forEach(comando => {
-    if (comando.executarSeMatch(textoMensagemNormalizado, msg)) {
+  comandos.forEach((comando) => {
+    if (comando.executarSeMatch(textoMensagem, msg)) {
       return;
     }
   });
 }
 
 function montaMensagemHelp(comandos) {
-  const reducer = (acumulador, comando) => acumulador + prefixo + comando.nome + ' -> ' + comando.descricao + '\n\n';
-  return comandos.reduce(reducer, '');
+  const reducer = (acumulador, comando) => acumulador + comando.nome + ' -> ' + comando.descricao + '\n\n';
+  return "**Todos os comando devem ser precedidos do prefixo: '" + prefixo + "'**\n\n" + comandos.reduce(reducer, '');
 }
 
 module.exports = respostaHandler;

@@ -3,30 +3,30 @@
 const Comando = require('./Comando');
 const { prefixo } = require('../constantes');
 const PerguntaController = require('../controllers/PerguntaController');
+const util = require('../util');
 
 const newQuestion = new Comando(
-  textoMensagemNormalizado => textoMensagemNormalizado.startsWith('newQuestion') || textoMensagemNormalizado.startsWith('nq'),
+  (textoMensagem) => util.textoComecaComComando(textoMensagem, 'newQuestion', 'nq'),
 
   async (msg, textoMensagemNormalizado) => {
     const pattrPrimeira = /(?<=1-).+(?=2-)/g;
     const pattrSegunda = /(?<=2-).+/g;
-    const texto = textoMensagemNormalizado.trim();
 
-    const primeiraOpcao = pattrPrimeira.exec(texto);
-    const segundaOpcao = pattrSegunda.exec(texto);
+    const primeiraOpcao = pattrPrimeira.exec(textoMensagemNormalizado);
+    const segundaOpcao = pattrSegunda.exec(textoMensagemNormalizado);
 
     if (!primeiraOpcao || !segundaOpcao) {
-      msg.channel.send('Uso incorreto do comando! Para instruções use ' + prefixo + 'help');
+      msg.channel.send(util.criaMensagemEmbarcadaErro('Uso incorreto do comando! Para instruções use ' + prefixo + 'help'));
       return;
     }
 
-    const resultado = await PerguntaController.create(primeiraOpcao[0], segundaOpcao[0]);
-    msg.channel.send(resultado.mensagem);
+    const resposta = await PerguntaController.create(primeiraOpcao[0].trim(), segundaOpcao[0].trim());
+    msg.channel.send(util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem));
   },
 
-  'newQuestion(nq)',
+  'newQuestion (ou nq)',
 
-  `Comando para criar uma nova pergunta. Uso: ${prefixo}newQuestion 1- Coca cola 2- Pepsi`
+  `Comando para criar uma nova pergunta. As opções devem ser escritas em uma linha e no máximo 255 caracteres.\nUso: ${prefixo}newQuestion 1- Coca cola 2- Pepsi`
 );
 
 module.exports = newQuestion;
