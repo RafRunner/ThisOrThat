@@ -12,7 +12,7 @@ function respostaHandler(msg) {
   const textoMensagem = msg.content.substring(1).trim();
 
   if (textoMensagem === 'help') {
-    const embed = util.criaMensagemEmbarcada('Como Usar o Bot:', montaMensagemHelp(comandos));
+    const embed = montaMensagemHelp(comandos);
     msg.channel.send(embed);
     return;
   }
@@ -25,8 +25,10 @@ function respostaHandler(msg) {
 }
 
 function montaMensagemHelp(comandos) {
-  const reducer = (acumulador, comando) => acumulador + comando.nome + ' -> ' + comando.descricao + '\n\n';
-  return "**Todos os comando devem ser precedidos do prefixo: '" + prefixo + "'**\n\n" + comandos.reduce(reducer, '');
+  const mensagemEmbarcada = util.criaMensagemEmbarcada('Como Usar o Bot:', "**Todos os comando devem ser precedidos do prefixo: '" + prefixo + "'**");
+  const reducer = (mensagemEmbarcada, comando) => mensagemEmbarcada.addField(comando.nome + ':', comando.descricao);
+  comandos.reduce(reducer, mensagemEmbarcada);
+  return mensagemEmbarcada;
 }
 
 module.exports = respostaHandler;

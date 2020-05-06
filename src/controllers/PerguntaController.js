@@ -1,9 +1,10 @@
 'use strict';
 
 const connection = require('../database/connection');
+const knex = require('knex');
 
 module.exports = {
-  // TODO No futuro deve retornar somente as perguntas do servidor
+  // TODO No futuro deve retornar somente as perguntas do servidor (provavelmetne com paginação)
   async index() {
     try {
       const perguntas = await connection('pergunta').select('*');
@@ -43,14 +44,15 @@ module.exports = {
     }
 
     try {
-      await connection('pergunta').insert({
+      const [id] = await connection('pergunta').insert({
         opcao_um: primeiraOpcao,
         opcao_dois: segundaOpcao,
       });
 
-      return { sucesso: true, mensagem: 'Pergunta criada com sucesso!' };
-    } catch {
-      return { sucesso: false, mensagem: 'Ocorreu um erro ao salvar a pergunta... Tente novamente mais tarde!' };
+      return { sucesso: true, mensagem: 'Pergunta criada com sucesso! Id: ' + id };
+    } catch (e) {
+      const mensagem = e.code === 'SQLITE_CONSTRAINT' ? 'Essa pergunta já está cadastrada!' : 'Ocorreu um erro ao salvar a pergunta...';
+      return { sucesso: false, mensagem: mensagem };
     }
   },
 

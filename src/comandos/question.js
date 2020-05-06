@@ -5,7 +5,7 @@ const PerguntaController = require('../controllers/PerguntaController');
 const { prefixo } = require('../constantes');
 const util = require('../util');
 
-const timeOut = 30; //Em s
+const timeOut = 90; //Em s
 
 const question = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'question', 'q'),
@@ -47,7 +47,7 @@ const question = new Comando(
           util.criaMensagemEmbarcada(
             'O Resultado foi:',
             `**${pergunta.opcao_um}:** ${votosUm} votos\n**${pergunta.opcao_dois}**: ${votosDois} votos\n\n` +
-              `${pergunta.opcao_um} tem ${porcentagemVotosUm}% dos votos e ${pergunta.opcao_dois} tem ${porcentagemVotosDois}%`
+              `'${pergunta.opcao_um}' tem ${porcentagemVotosUm}% dos votos (no total) e '${pergunta.opcao_dois}' tem ${porcentagemVotosDois}%`
           )
         );
       }, timeOut * 1000);
@@ -59,7 +59,7 @@ const question = new Comando(
 
   'question (ou q)',
 
-  `Comando para o bot fazer uma pergunta com duas opções (🅰️ e 🅱️). Reaja com uma dessas opções para votar. Opicinal: adicione o id da pergunta depois do comando para escolher uma pergunta`
+  `Será feita uma pergunta com duas opções (🅰️ e 🅱️). Reaja com uma dessas opções para votar. Opicinal: adicione o id da pergunta depois do comando para escolher uma pergunta`
 );
 
 module.exports = question;

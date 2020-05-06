@@ -9,8 +9,8 @@ const newQuestion = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'newquestion', 'nq'),
 
   async (msg, textoMensagem) => {
-    const pattrPrimeira = /(?<=1-).+(?=2-)/g;
-    const pattrSegunda = /(?<=2-).+/g;
+    const pattrPrimeira = /(?<=1-|1 -).+(?=2 ?-)/g;
+    const pattrSegunda = /(?<=2-|2 -).+/g;
 
     const primeiraOpcao = pattrPrimeira.exec(textoMensagem);
     const segundaOpcao = pattrSegunda.exec(textoMensagem);

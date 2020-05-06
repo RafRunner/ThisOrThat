@@ -6,7 +6,7 @@ const util = require('../util');
 
 function montaTextoPerguntas(perguntas) {
   const reducer = (acumulador, pergunta) =>
-    acumulador + '**Id: ' + pergunta.id + " - Você prefere '" + pergunta.opcao_um + "' ou '" + pergunta.opcao_dois + "'?**\n";
+    acumulador + '**Id: ' + pergunta.id + "** - Você prefere '" + pergunta.opcao_um + "' ou '" + pergunta.opcao_dois + "'?\n";
   return perguntas.reduce(reducer, '');
 }
 
