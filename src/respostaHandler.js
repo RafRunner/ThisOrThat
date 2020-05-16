@@ -11,7 +11,7 @@ function respostaHandler(msg) {
 
   const textoMensagem = msg.content.substring(1).trim();
 
-  if (textoMensagem === 'help') {
+  if (util.textoEhComando(textoMensagem, 'commands', 'c')) {
     const embed = montaMensagemHelp(comandos);
     msg.channel.send(embed);
     return;
@@ -25,7 +25,10 @@ function respostaHandler(msg) {
 }
 
 function montaMensagemHelp(comandos) {
-  const mensagemEmbarcada = util.criaMensagemEmbarcada('Como Usar o Bot:', "**Todos os comando devem ser precedidos do prefixo: '" + prefixo + "'**");
+  const mensagemEmbarcada = util.criaMensagemEmbarcada(
+    'Comandos existentes:',
+    "**Todos os comando devem ser precedidos do prefixo: '" + prefixo + "'**"
+  );
   const reducer = (mensagemEmbarcada, comando) => mensagemEmbarcada.addField(comando.nome + ':', comando.descricao);
   comandos.reduce(reducer, mensagemEmbarcada);
   return mensagemEmbarcada;

@@ -29,28 +29,32 @@ const question = new Comando(
       const mensagemPergunta = await msg.channel.send(
         util.criaMensagemEmbarcada('Você prefere...', `🅰️ ${pergunta.opcao_um}\n🅱️ ${pergunta.opcao_dois}`)
       );
-      mensagemPergunta.react('🅰️').then(() => mensagemPergunta.react('🅱️'));
+      mensagemPergunta
+        .react('🅰️')
+        .then(() => mensagemPergunta.react('🅱️'))
+        .then(() => {
+          setTimeout(() => {
+            const votosUm = mensagemPergunta.reactions.resolve('🅰️').count - 1;
+            const votosDois = mensagemPergunta.reactions.resolve('🅱️').count - 1;
 
-      setTimeout(() => {
-        const votosUm = mensagemPergunta.reactions.resolve('🅰️').count - 1;
-        const votosDois = mensagemPergunta.reactions.resolve('🅱️').count - 1;
+            const novoTotalUm = pergunta.votos_opcao_um + votosUm;
+            const novoTotalDois = pergunta.votos_opcao_dois + votosDois;
 
-        const novoTotalUm = pergunta.votos_opcao_um + votosUm;
-        const novoTotalDois = pergunta.votos_opcao_dois + votosDois;
+            PerguntaController.updateVotos(pergunta, novoTotalUm, novoTotalDois);
 
-        PerguntaController.updateVotos(pergunta, novoTotalUm, novoTotalDois);
+            const porcentagemVotosUm = ((novoTotalUm / (novoTotalUm + novoTotalDois)) * 100).toFixed(0);
+            const porcentagemVotosDois = 100 - porcentagemVotosUm;
 
-        const porcentagemVotosUm = ((novoTotalUm / (novoTotalUm + novoTotalDois)) * 100).toFixed(0);
-        const porcentagemVotosDois = 100 - porcentagemVotosUm;
+            msg.channel.send(
+              util.criaMensagemEmbarcada(
+                'O Resultado foi:',
+                `**${pergunta.opcao_um}:** ${votosUm} votos\n**${pergunta.opcao_dois}**: ${votosDois} votos\n\n` +
+                  `'${pergunta.opcao_um}' tem ${porcentagemVotosUm}% dos votos (no total) e '${pergunta.opcao_dois}' tem ${porcentagemVotosDois}%`
+              )
+            );
+          }, timeOut * 1000);
+        });
 
-        msg.channel.send(
-          util.criaMensagemEmbarcada(
-            'O Resultado foi:',
-            `**${pergunta.opcao_um}:** ${votosUm} votos\n**${pergunta.opcao_dois}**: ${votosDois} votos\n\n` +
-              `'${pergunta.opcao_um}' tem ${porcentagemVotosUm}% dos votos (no total) e '${pergunta.opcao_dois}' tem ${porcentagemVotosDois}%`
-          )
-        );
-      }, timeOut * 1000);
       return;
     }
 

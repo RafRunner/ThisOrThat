@@ -5,11 +5,20 @@ const knex = require('knex');
 
 module.exports = {
   // TODO No futuro deve retornar somente as perguntas do servidor (provavelmetne com paginação)
-  async index() {
-    try {
-      const perguntas = await connection('pergunta').select('*');
+  async index(page = 0) {
+    const pageSize = 15;
 
-      return { sucesso: true, perguntas: perguntas };
+    try {
+      const [count] = await connection('pergunta').count();
+
+      const perguntas = await connection('pergunta')
+        .limit(pageSize)
+        .offset(page * pageSize)
+        .select('*');
+
+      const paginas = Math.ceil(count['count(*)'] / pageSize);
+
+      return { sucesso: true, perguntas: perguntas, paginas };
     } catch {
       return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar as perguntas...' };
     }
