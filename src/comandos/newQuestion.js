@@ -2,7 +2,7 @@
 
 const Comando = require('./Comando');
 const { prefixo } = require('../constantes');
-const PerguntaController = require('../controllers/PerguntaController');
+const PerguntaService = require('../services/PerguntaService');
 const util = require('../util');
 
 const newQuestion = new Comando(
@@ -20,7 +20,7 @@ const newQuestion = new Comando(
       return;
     }
 
-    const resposta = await PerguntaController.create(primeiraOpcao[0].trim(), segundaOpcao[0].trim());
+    const resposta = await PerguntaService.create(primeiraOpcao[0].trim(), segundaOpcao[0].trim());
     msg.channel.send(util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem));
   },
 

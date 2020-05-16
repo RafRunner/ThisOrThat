@@ -2,7 +2,7 @@
 
 const Comando = require('./Comando');
 const { prefixo } = require('../constantes');
-const PerguntaController = require('../controllers/PerguntaController');
+const PerguntaService = require('../services/PerguntaService');
 const util = require('../util');
 
 const deleteQuestion = new Comando(
@@ -17,7 +17,7 @@ const deleteQuestion = new Comando(
       return;
     }
 
-    const resposta = await PerguntaController.delete(id[0]);
+    const resposta = await PerguntaService.delete(id[0]);
     msg.channel.send(util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem));
   },
 

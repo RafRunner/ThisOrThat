@@ -4,8 +4,8 @@ const connection = require('../database/connection');
 const knex = require('knex');
 
 module.exports = {
-  // TODO No futuro deve retornar somente as perguntas do servidor (provavelmetne com paginação)
-  async index(page = 0) {
+  // TODO No futuro deve retornar somente as perguntas do servidor
+  async getAllpaginado(page = 0) {
     const pageSize = 15;
 
     try {

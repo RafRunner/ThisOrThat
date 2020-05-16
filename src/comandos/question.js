@@ -1,7 +1,7 @@
 'use strict';
 
 const Comando = require('./Comando');
-const PerguntaController = require('../controllers/PerguntaController');
+const PerguntaService = require('../services/PerguntaService');
 const { prefixo } = require('../constantes');
 const util = require('../util');
 
@@ -16,9 +16,9 @@ const question = new Comando(
 
     let resposta;
     if (id) {
-      resposta = await PerguntaController.get(id[0]);
+      resposta = await PerguntaService.get(id[0]);
     } else if (util.textoEhComando(textoMensagem, 'question', 'q')) {
-      resposta = await PerguntaController.getRandonQuestion();
+      resposta = await PerguntaService.getRandonQuestion();
     } else {
       msg.channel.send(util.criaMensagemEmbarcadaErro(`Uso incorreto do comando! Uso: ${prefixo}q ou ${prefixo}q id_da_pergunta`));
       return;
@@ -40,7 +40,7 @@ const question = new Comando(
             const novoTotalUm = pergunta.votos_opcao_um + votosUm;
             const novoTotalDois = pergunta.votos_opcao_dois + votosDois;
 
-            PerguntaController.updateVotos(pergunta, novoTotalUm, novoTotalDois);
+            PerguntaService.updateVotos(pergunta, novoTotalUm, novoTotalDois);
 
             const porcentagemVotosUm = ((novoTotalUm / (novoTotalUm + novoTotalDois)) * 100).toFixed(0);
             const porcentagemVotosDois = 100 - porcentagemVotosUm;

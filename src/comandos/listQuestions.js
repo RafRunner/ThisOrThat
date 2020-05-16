@@ -1,7 +1,7 @@
 'use strict';
 
 const Comando = require('./Comando');
-const PerguntaController = require('../controllers/PerguntaController');
+const PerguntaService = require('../services/PerguntaService');
 const util = require('../util');
 
 function montaMensagemPerguntas(titulo, perguntas) {
@@ -15,7 +15,7 @@ const listQuestions = new Comando(
   (textoMensagem) => util.textoEhComando(textoMensagem, 'listquestions', 'lq'),
 
   async (msg, textoMensagem) => {
-    const resposta = await PerguntaController.index();
+    const resposta = await PerguntaService.getAllpaginado();
 
     if (!resposta.sucesso) {
       msg.channel.send(util.criaMensagemEmbarcadaErro(resposta.mensagem));
@@ -54,7 +54,7 @@ const listQuestions = new Comando(
             page--;
           }
 
-          const novaResposta = await PerguntaController.index(page);
+          const novaResposta = await PerguntaService.getAllpaginado(page);
 
           if (resposta.sucesso) {
             mensagemPerguntas.edit(montaMensagemPerguntas(`Peguntas (página ${page + 1}/${novaResposta.paginas}):`, novaResposta.perguntas));
