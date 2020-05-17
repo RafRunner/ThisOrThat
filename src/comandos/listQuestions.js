@@ -56,8 +56,8 @@ const listQuestions = new Comando(
 
           const novaResposta = await PerguntaService.getAllpaginado(page);
 
-          if (resposta.sucesso) {
-            mensagemPerguntas.edit(montaMensagemPerguntas(`Peguntas (página ${page + 1}/${novaResposta.paginas}):`, novaResposta.perguntas));
+          if (novaResposta.sucesso) {
+            mensagemPerguntas.edit(montaMensagemPerguntas(`Peguntas (página ${page + 1}/${resposta.paginas}):`, novaResposta.perguntas));
           }
         }, 100);
 
