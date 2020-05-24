@@ -12,7 +12,7 @@ function respostaHandler(msg) {
   const textoMensagem = msg.content.substring(1).trim();
 
   if (util.textoEhComando(textoMensagem, 'commands', 'c')) {
-    const embed = montaMensagemHelp(comandos);
+    const embed = montaMensagemComandos(comandos);
     msg.channel.send(embed);
     return;
   }
@@ -24,12 +24,17 @@ function respostaHandler(msg) {
   });
 }
 
-function montaMensagemHelp(comandos) {
+function montaMensagemComandos(comandos) {
   const mensagemEmbarcada = util.criaMensagemEmbarcada(
     'Comandos existentes:',
     "**Todos os comando devem ser precedidos do prefixo: '" + prefixo + "'**"
   );
-  const reducer = (mensagemEmbarcada, comando) => mensagemEmbarcada.addField(comando.nome + ':', comando.descricao);
+  const reducer = (mensagemEmbarcada, comando) => {
+    if (comando.nome) {
+      return mensagemEmbarcada.addField(comando.nome + ':', comando.descricao);
+    }
+    return mensagemEmbarcada;
+  };
   comandos.reduce(reducer, mensagemEmbarcada);
   return mensagemEmbarcada;
 }

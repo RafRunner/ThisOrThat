@@ -13,7 +13,7 @@ const deleteQuestion = new Comando(
     const id = pattrid.exec(textoMensagem);
 
     if (!id) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(`Uso incorreto do comando! Uso: ${prefixo}dq id_da_pergunta`));
+      msg.channel.send(util.criaMensagemEmbarcadaErro(`Uso: ${prefixo}dq id_da_pergunta`, 'Uso incorreto do comando! '));
       return;
     }
 

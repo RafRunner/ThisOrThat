@@ -15,26 +15,33 @@ const listQuestions = new Comando(
   (textoMensagem) => util.textoEhComando(textoMensagem, 'listquestions', 'lq'),
 
   async (msg, textoMensagem) => {
-    const resposta = await PerguntaService.getAllpaginado();
+    const resposta = await PerguntaService.getAllpaginado(0, msg.guild.id);
 
     if (!resposta.sucesso) {
       msg.channel.send(util.criaMensagemEmbarcadaErro(resposta.mensagem));
       return;
     }
 
-    const mensagemPerguntas = await msg.channel.send(montaMensagemPerguntas(`Perguntas (página 1/${resposta.paginas}):`, resposta.perguntas));
+    if (resposta.paginas === 0) {
+      msg.channel.send(util.criaMensagemEmbarcadaErro('Esse servidor ainda não tem nenhuma pergunta cadastrada!', 'Cadastre novas perguntas!'));
+      return;
+    }
+
+    const mensagemPerguntas = await msg.channel.send(
+      montaMensagemPerguntas(`Perguntas do servidor (página 1/${resposta.paginas}):`, resposta.perguntas)
+    );
 
     let page = 0;
-    let nAnteriorReacoesProxima = 0;
-    let nAnteriorReacoesAnterior = 0;
+    let nAnteriorReacoesProxima = 1;
+    let nAnteriorReacoesAnterior = 1;
 
     mensagemPerguntas
       .react('◀️')
       .then(() => mensagemPerguntas.react('▶️'))
       .then(() => {
         const timer = setInterval(async () => {
-          const nAtualReacoesProxima = mensagemPerguntas.reactions.resolve('▶️').count - 1;
-          const nAtualReacoesAnterior = mensagemPerguntas.reactions.resolve('◀️').count - 1;
+          const nAtualReacoesProxima = mensagemPerguntas.reactions.resolve('▶️').count;
+          const nAtualReacoesAnterior = mensagemPerguntas.reactions.resolve('◀️').count;
 
           if (nAtualReacoesProxima === nAnteriorReacoesProxima && nAtualReacoesAnterior === nAnteriorReacoesAnterior) {
             return;
@@ -54,20 +61,20 @@ const listQuestions = new Comando(
             page--;
           }
 
-          const novaResposta = await PerguntaService.getAllpaginado(page);
+          const novaResposta = await PerguntaService.getAllpaginado(page, msg.guild.id);
 
           if (novaResposta.sucesso) {
             mensagemPerguntas.edit(montaMensagemPerguntas(`Peguntas (página ${page + 1}/${resposta.paginas}):`, novaResposta.perguntas));
           }
         }, 100);
 
-        setTimeout(() => clearInterval(timer), 90 * 1000);
+        setTimeout(() => clearInterval(timer), 120 * 1000);
       });
   },
 
   'listQuestions (ou lq)',
 
-  `Comando para listar todas as perguntas.`
+  `Comando para listar todas as perguntas desse servidor.`
 );
 
 module.exports = listQuestions;

@@ -20,7 +20,7 @@ const newQuestion = new Comando(
       return;
     }
 
-    const resposta = await PerguntaService.create(primeiraOpcao[0].trim(), segundaOpcao[0].trim());
+    const resposta = await PerguntaService.create(primeiraOpcao[0].trim(), segundaOpcao[0].trim(), msg.guild.id);
     msg.channel.send(util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem));
   },
 

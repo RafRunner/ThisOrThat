@@ -7,8 +7,8 @@ module.exports = {
     return new Discord.MessageEmbed().setTitle(`**${titulo}**`).setColor(0x3477eb).setDescription(descricao);
   },
 
-  criaMensagemEmbarcadaErro(descricao) {
-    return new Discord.MessageEmbed().setTitle('**Erro**').setColor(0xff0000).setDescription(descricao);
+  criaMensagemEmbarcadaErro(descricao, titulo = '**Erro**') {
+    return new Discord.MessageEmbed().setTitle(titulo).setColor(0xff0000).setDescription(descricao);
   },
 
   criaMensagemEmbarcadaResultado(sucesso, descricao) {

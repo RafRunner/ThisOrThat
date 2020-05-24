@@ -1,45 +1,64 @@
 'use strict';
 
 const connection = require('../database/connection');
-const knex = require('knex');
 
 module.exports = {
-  // TODO No futuro deve retornar somente as perguntas do servidor
-  async getAllpaginado(page = 0) {
+  async getAllpaginado(page, id_servidor) {
     const pageSize = 15;
 
     try {
-      const [count] = await connection('pergunta').count();
+      const [count] = await connection('pergunta').where('id_servidor', id_servidor).count();
 
       const perguntas = await connection('pergunta')
+        .where('id_servidor', id_servidor)
         .limit(pageSize)
         .offset(page * pageSize)
         .select('*');
 
       const paginas = Math.ceil(count['count(*)'] / pageSize);
 
-      return { sucesso: true, perguntas: perguntas, paginas };
-    } catch {
+      return { sucesso: true, perguntas, paginas };
+    } catch (e) {
       return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar as perguntas...' };
     }
   },
 
-  async get(id) {
+  async get(id, servidor) {
     try {
-      const pergunta = await connection('pergunta').where('id', id).first();
+      let pergunta = await connection('pergunta').where({ id, id_servidor: servidor.id }).first();
 
-      return { sucesso: true, pergunta: pergunta };
+      if (pergunta) {
+        return { sucesso: true, pergunta };
+      }
+      return { sucesso: false, mensagem: 'Pergunta não encontrada!' };
     } catch {
-      return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar as perguntas...' };
+      return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar a pergunta...' };
     }
   },
 
-  async getRandonQuestion() {
+  async getRandonQuestion(servidor) {
     try {
-      const [count] = await connection('pergunta').count();
-      const numeroSelecionado = Math.floor(Math.random() * count['count(*)']);
+      let count = connection('pergunta');
+      if (servidor.somente_perguntas_servidor) {
+        count = count.where('id_servidor', servidor.id);
+      } else if (servidor.somente_perguntas_globais) {
+        count = count.whereNull('id_servidor');
+      }
+      count = await count.count().first();
+      count = count['count(*)'];
+      if (count === 0) {
+        return { sucesso: false, mensagem: 'Nenhuma pergunta encontrada! Cadastre uma pergunta ou mude o modo do bot' };
+      }
 
-      const perguntaSelecionada = await connection('pergunta').orderBy('id').offset(numeroSelecionado).first();
+      const numeroSelecionado = Math.floor(Math.random() * count);
+
+      let perguntaSelecionada = connection('pergunta');
+      if (servidor.somente_perguntas_servidor) {
+        perguntaSelecionada = perguntaSelecionada.where('id_servidor', servidor.id);
+      } else if (servidor.somente_perguntas_globais) {
+        perguntaSelecionada = perguntaSelecionada.whereNull('id_servidor');
+      }
+      perguntaSelecionada = await perguntaSelecionada.orderBy('id').offset(numeroSelecionado).first();
 
       return { sucesso: true, pergunta: perguntaSelecionada };
     } catch {
@@ -47,7 +66,7 @@ module.exports = {
     }
   },
 
-  async create(primeiraOpcao, segundaOpcao) {
+  async create(primeiraOpcao, segundaOpcao, id_servidor) {
     if (primeiraOpcao.length > 255 || segundaOpcao.length > 255) {
       return { sucesso: false, mensagem: 'As opções devem ter no máximo 255 caracteres!' };
     }
@@ -61,7 +80,7 @@ module.exports = {
       return { sucesso: true, mensagem: 'Pergunta criada com sucesso! Id: ' + id };
     } catch (e) {
       const mensagem = e.code === 'SQLITE_CONSTRAINT' ? 'Essa pergunta já está cadastrada!' : 'Ocorreu um erro ao salvar a pergunta...';
-      return { sucesso: false, mensagem: mensagem };
+      return { sucesso: false, mensagem };
     }
   },
 

@@ -5,7 +5,7 @@ const { prefixo } = require('../constantes');
 const util = require('../util');
 
 const help = new Comando(
-  (textoMensagem) => util.textoComecaComComando(textoMensagem, 'help', 'h'),
+  (textoMensagem) => util.textoEhComando(textoMensagem, 'help', 'h'),
 
   async (msg, textoMensagem) => {
     const mensagemEmbarcada = util.criaMensagemEmbarcada('Como usar o bot:', '');
@@ -19,15 +19,15 @@ const help = new Comando(
     );
     mensagemEmbarcada.addField(
       'Posso criar minhas própriar perguntas?',
-      `Claro! Basta usar o comando ${prefixo}nq, porém essa pergunta só irá aparecer nesse servidor`
+      `Claro! Basta usar o comando ${prefixo}nq, porém essa pergunta só irá aparecer nesse servidor. Você também só pode deletar e listar perguntas desse servidor`
     );
     mensagemEmbarcada.addField('O que mais posso fazer?', `Para uma lista compelta de comandos e suas explicações, use o comando ${prefixo}c`);
     msg.channel.send(mensagemEmbarcada);
   },
 
-  'commands (ou c)',
+  '',
 
-  'Lista todos os comandos existentes e seus usos.'
+  ''
 );
 
 module.exports = help;
