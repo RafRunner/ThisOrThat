@@ -6,7 +6,7 @@ const util = require('../util');
 const ServidorService = require('../services/ServidorService');
 
 const help = new Comando(
-  (textoMensagem) => util.textoEhComando(textoMensagem, 'serverStatus', 'ss'),
+  (textoMensagem) => util.textoEhComando(textoMensagem, 'serverstatus', 'ss'),
 
   async (msg, textoMensagem) => {
     const servidor = await ServidorService.tentaCriarEObterOuPadrao(msg.guild.id);
