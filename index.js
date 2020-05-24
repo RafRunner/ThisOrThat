@@ -24,11 +24,11 @@ client.on('guildCreate', async (guild) => {
   if (await ServidorService.exists(guild.id)) {
     return;
   }
-  ServidorService.registrar(guild);
+  ServidorService.registrar(guild.id);
 });
 
 client.on('guildDelete', (guild) => {
-  ServidorService.removerDosRegistros(guild);
+  ServidorService.delete(guild.id);
 });
 
 client.on('message', (msg) => {

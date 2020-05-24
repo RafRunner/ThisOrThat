@@ -6,7 +6,7 @@ const util = require('../util');
 const ServidorService = require('../services/ServidorService');
 
 const help = new Comando(
-  (textoMensagem) => util.textoComecaComComando(textoMensagem, 'timeOut', 't'),
+  (textoMensagem) => util.textoComecaComComando(textoMensagem, 'timeout', 't'),
 
   async (msg, textoMensagem) => {
     const pattrTempo = /\d+/g;
@@ -25,7 +25,7 @@ const help = new Comando(
     }
   },
 
-  'timeOut (ou t)',
+  'timeout (ou t)',
 
   `Altera por quanto tempo (em segundos) uma pergunta poderá ser respondida antes dos resultados serem mostrados.\nUso: ${prefixo}t tempo_em_segundos`
 );

@@ -14,7 +14,7 @@ const question = new Comando(
     const id = pattrid.exec(textoMensagem);
 
     const servidor = await ServidorService.tentaCriarEObterOuPadrao(msg.guild.id);
-    const timeOut = servidor.tempo_para_responder;
+    const timeout = servidor.tempo_para_responder;
 
     let resposta;
     if (id) {
@@ -59,7 +59,7 @@ const question = new Comando(
                 `'${pergunta.opcao_um}' tem ${porcentagemVotosUm}% dos votos (no total) e '${pergunta.opcao_dois}' tem ${porcentagemVotosDois}%`
             )
           );
-        }, timeOut * 1000);
+        }, timeout * 1000);
       });
   },
 

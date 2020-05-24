@@ -21,7 +21,7 @@ const help = new Comando(
     }
 
     const mensagemEmbarcada = util.criaMensagemEmbarcada('Configurações atuais do servidor:', '');
-    mensagemEmbarcada.addField('Tempo para responder as perguntas (timeOut):', servidor.tempo_para_responder + ' segundos');
+    mensagemEmbarcada.addField('Tempo para responder as perguntas (timeout):', servidor.tempo_para_responder + ' segundos');
     mensagemEmbarcada.addField('Modo (quais perguntas serão feitas):', modo);
     msg.channel.send(mensagemEmbarcada);
   },

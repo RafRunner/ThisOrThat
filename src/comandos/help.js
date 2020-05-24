@@ -11,7 +11,7 @@ const help = new Comando(
     const mensagemEmbarcada = util.criaMensagemEmbarcada('Como usar o bot:', '');
     mensagemEmbarcada.addField(
       'O que é o ThisOrThat?',
-      'Ele é um bot que oderece situações onde as pessoas do servidor devem votar em um entre dois cenários propostos por perguntas feitas pelo bot!'
+      'Ele é um bot que oferece situações onde as pessoas do servidor devem votar em um entre dois cenários propostos por perguntas feitas pelo bot!'
     );
     mensagemEmbarcada.addField(
       'Como faço para o bot fazer um pergunta?',

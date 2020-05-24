@@ -41,6 +41,9 @@ module.exports = {
   },
 
   async createAndUpdate(id_servidor, camposAlterados) {
+    if (camposAlterados.tempo_para_responder && camposAlterados.tempo_para_responder > 1800) {
+      return { sucesso: false, erro: 'O tempo de timeout máximo é de 1800 s' };
+    }
     try {
       if (!(await this.exists(id_servidor))) {
         if (!(await this.registrar(id_servidor))) {
@@ -83,7 +86,7 @@ module.exports = {
       tentativas++;
     }
 
-    return resposta.sucesso;
+    return resultado.sucesso;
   },
 
   async getServidorPadrao() {
@@ -99,28 +102,9 @@ module.exports = {
 
       await connection('servidores').where('id', id).delete();
 
-      return { sucesso: true, mensagem: 'Pergunta deletada com sucesso!' };
+      return { sucesso: true, mensagem: 'Servidor deletado com sucesso!' };
     } catch {
       return { sucesso: false, mensagem: 'Ocorreu um erro ao deletar o servidor... Tente novamente mais tarde!' };
-    }
-  },
-
-  async removerDosRegistros(id_servidor) {
-    let resultado = await ServidorService.delete(id_servidor);
-
-    if (resultado.mensagem === 'Esse servidor não existe!') {
-      return;
-    }
-
-    let tentativas = 1;
-    console.log('Tentativa de número ' + tentativas);
-    console.log(resultado);
-
-    while (!resultado.sucesso && tentativas < 11) {
-      resultado = await ServidorService.delete(id_servidor);
-      console.log('Tentativa de número ' + tentativas);
-      console.log(resultado);
-      tentativas++;
     }
   },
 };
