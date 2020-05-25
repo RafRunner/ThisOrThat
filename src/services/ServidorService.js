@@ -41,8 +41,8 @@ module.exports = {
   },
 
   async createAndUpdate(id_servidor, camposAlterados) {
-    if (camposAlterados.tempo_para_responder && camposAlterados.tempo_para_responder > 1800) {
-      return { sucesso: false, erro: 'O tempo de timeout máximo é de 1800 s' };
+    if (camposAlterados.tempo_para_responder && (camposAlterados.tempo_para_responder > 1800 || camposAlterados.tempo_para_responder < 10)) {
+      return { sucesso: false, erro: 'O tempo de timeout deve estar entre 10 e 1800 segundos' };
     }
     try {
       if (!(await this.exists(id_servidor))) {

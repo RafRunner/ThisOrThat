@@ -27,7 +27,7 @@ const help = new Comando(
 
   'timeout (ou t)',
 
-  `Altera por quanto tempo (em segundos) uma pergunta poderá ser respondida antes dos resultados serem mostrados.\nUso: ${prefixo}t tempo_em_segundos`
+  `Altera por quanto tempo (em segundos) uma pergunta poderá ser respondida antes dos resultados serem mostrados.\nUso: ${prefixo}timeOut tempo_em_segundos`
 );
 
 module.exports = help;

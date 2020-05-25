@@ -17,7 +17,7 @@ const deleteQuestion = new Comando(
       return;
     }
 
-    const resposta = await PerguntaService.delete(id[0]);
+    const resposta = await PerguntaService.delete(id[0], msg.guild.id);
     msg.channel.send(util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem));
   },
 

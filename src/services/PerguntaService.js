@@ -4,7 +4,7 @@ const connection = require('../database/connection');
 
 module.exports = {
   async getAllpaginado(page, id_servidor) {
-    const pageSize = 15;
+    const pageSize = 10;
 
     try {
       const [count] = await connection('pergunta').where('id_servidor', id_servidor).count();
@@ -23,9 +23,9 @@ module.exports = {
     }
   },
 
-  async get(id, servidor) {
+  async get(id, id_servidor) {
     try {
-      let pergunta = await connection('pergunta').where({ id, id_servidor: servidor.id }).first();
+      let pergunta = await connection('pergunta').where({ id, id_servidor }).first();
 
       if (pergunta) {
         return { sucesso: true, pergunta };
@@ -75,6 +75,7 @@ module.exports = {
       const [id] = await connection('pergunta').insert({
         opcao_um: primeiraOpcao,
         opcao_dois: segundaOpcao,
+        id_servidor: id_servidor,
       });
 
       return { sucesso: true, mensagem: 'Pergunta criada com sucesso! Id: ' + id };
@@ -97,11 +98,11 @@ module.exports = {
     }
   },
 
-  async delete(id) {
+  async delete(id, id_servidor) {
     try {
-      const pergunta = await connection('pergunta').where('id', id).select('id').first();
+      const pergunta = await connection('pergunta').where({ id, id_servidor }).select('id').first();
       if (!pergunta) {
-        return { sucesso: false, mensagem: 'Essa pergunta não existe!' };
+        return { sucesso: false, mensagem: 'Essa pergunta não existe ou não é desse servidor!' };
       }
 
       await connection('pergunta').where('id', id).delete();

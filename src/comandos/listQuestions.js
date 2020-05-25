@@ -31,45 +31,47 @@ const listQuestions = new Comando(
       montaMensagemPerguntas(`Perguntas do servidor (página 1/${resposta.paginas}):`, resposta.perguntas)
     );
 
+    if (resposta.paginas === 1) {
+      return;
+    }
+
     let page = 0;
     let nAnteriorReacoesProxima = 1;
     let nAnteriorReacoesAnterior = 1;
 
-    mensagemPerguntas
-      .react('◀️')
-      .then(() => mensagemPerguntas.react('▶️'))
-      .then(() => {
-        const timer = setInterval(async () => {
-          const nAtualReacoesProxima = mensagemPerguntas.reactions.resolve('▶️').count;
-          const nAtualReacoesAnterior = mensagemPerguntas.reactions.resolve('◀️').count;
+    await mensagemPerguntas.react('◀️');
+    await mensagemPerguntas.react('▶️');
 
-          if (nAtualReacoesProxima === nAnteriorReacoesProxima && nAtualReacoesAnterior === nAnteriorReacoesAnterior) {
-            return;
-          }
-          if (nAtualReacoesProxima !== nAnteriorReacoesProxima) {
-            nAnteriorReacoesProxima = nAtualReacoesProxima;
-            if (page + 1 === resposta.paginas) {
-              return;
-            }
-            page++;
-          }
-          if (nAtualReacoesAnterior !== nAnteriorReacoesAnterior) {
-            nAnteriorReacoesAnterior = nAtualReacoesAnterior;
-            if (page === 0) {
-              return;
-            }
-            page--;
-          }
+    const timer = setInterval(async () => {
+      const nAtualReacoesProxima = mensagemPerguntas.reactions.resolve('▶️').count;
+      const nAtualReacoesAnterior = mensagemPerguntas.reactions.resolve('◀️').count;
 
-          const novaResposta = await PerguntaService.getAllpaginado(page, msg.guild.id);
+      if (nAtualReacoesProxima === nAnteriorReacoesProxima && nAtualReacoesAnterior === nAnteriorReacoesAnterior) {
+        return;
+      }
+      if (nAtualReacoesProxima !== nAnteriorReacoesProxima) {
+        nAnteriorReacoesProxima = nAtualReacoesProxima;
+        if (page + 1 === resposta.paginas) {
+          return;
+        }
+        page++;
+      }
+      if (nAtualReacoesAnterior !== nAnteriorReacoesAnterior) {
+        nAnteriorReacoesAnterior = nAtualReacoesAnterior;
+        if (page === 0) {
+          return;
+        }
+        page--;
+      }
 
-          if (novaResposta.sucesso) {
-            mensagemPerguntas.edit(montaMensagemPerguntas(`Peguntas (página ${page + 1}/${resposta.paginas}):`, novaResposta.perguntas));
-          }
-        }, 100);
+      const novaResposta = await PerguntaService.getAllpaginado(page, msg.guild.id);
 
-        setTimeout(() => clearInterval(timer), 120 * 1000);
-      });
+      if (novaResposta.sucesso) {
+        mensagemPerguntas.edit(montaMensagemPerguntas(`Peguntas (página ${page + 1}/${resposta.paginas}):`, novaResposta.perguntas));
+      }
+    }, 100);
+
+    setTimeout(() => clearInterval(timer), 120 * 1000);
   },
 
   'listQuestions (ou lq)',

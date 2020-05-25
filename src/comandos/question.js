@@ -18,7 +18,7 @@ const question = new Comando(
 
     let resposta;
     if (id) {
-      resposta = await PerguntaService.get(id[0], servidor);
+      resposta = await PerguntaService.get(id[0], servidor.id_servidor);
     } else if (util.textoEhComando(textoMensagem, 'question', 'q')) {
       resposta = await PerguntaService.getRandonQuestion(servidor);
     } else {
@@ -36,31 +36,29 @@ const question = new Comando(
       util.criaMensagemEmbarcada('Você prefere...', `🅰️ ${pergunta.opcao_um}\n🅱️ ${pergunta.opcao_dois}`)
     );
 
-    mensagemPergunta
-      .react('🅰️')
-      .then(() => mensagemPergunta.react('🅱️'))
-      .then(() => {
-        setTimeout(() => {
-          const votosUm = mensagemPergunta.reactions.resolve('🅰️').count - 1;
-          const votosDois = mensagemPergunta.reactions.resolve('🅱️').count - 1;
+    await mensagemPergunta.react('🅰️');
+    await mensagemPergunta.react('🅱️');
 
-          const novoTotalUm = pergunta.votos_opcao_um + votosUm;
-          const novoTotalDois = pergunta.votos_opcao_dois + votosDois;
+    setTimeout(() => {
+      const votosUm = mensagemPergunta.reactions.resolve('🅰️').count - 1;
+      const votosDois = mensagemPergunta.reactions.resolve('🅱️').count - 1;
 
-          PerguntaService.updateVotos(pergunta, novoTotalUm, novoTotalDois);
+      const novoTotalUm = pergunta.votos_opcao_um + votosUm;
+      const novoTotalDois = pergunta.votos_opcao_dois + votosDois;
 
-          const porcentagemVotosUm = ((novoTotalUm / (novoTotalUm + novoTotalDois)) * 100).toFixed(0);
-          const porcentagemVotosDois = 100 - porcentagemVotosUm;
+      PerguntaService.updateVotos(pergunta, novoTotalUm, novoTotalDois);
 
-          msg.channel.send(
-            util.criaMensagemEmbarcada(
-              'O Resultado foi:',
-              `**${pergunta.opcao_um}:** ${votosUm} votos\n**${pergunta.opcao_dois}**: ${votosDois} votos\n\n` +
-                `'${pergunta.opcao_um}' tem ${porcentagemVotosUm}% dos votos (no total) e '${pergunta.opcao_dois}' tem ${porcentagemVotosDois}%`
-            )
-          );
-        }, timeout * 1000);
-      });
+      const porcentagemVotosUm = ((novoTotalUm / (novoTotalUm + novoTotalDois)) * 100).toFixed(0);
+      const porcentagemVotosDois = 100 - porcentagemVotosUm;
+
+      msg.channel.send(
+        util.criaMensagemEmbarcada(
+          'O Resultado foi:',
+          `**${pergunta.opcao_um}:** ${votosUm} votos\n**${pergunta.opcao_dois}**: ${votosDois} votos\n\n` +
+            `'${pergunta.opcao_um}' tem ${porcentagemVotosUm}% dos votos (no total) e '${pergunta.opcao_dois}' tem ${porcentagemVotosDois}%`
+        )
+      );
+    }, timeout * 1000);
   },
 
   'question (ou q)',

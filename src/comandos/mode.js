@@ -41,7 +41,7 @@ const help = new Comando(
 
   'mode (ou m)',
 
-  `Altera o modo do bot. Atualmente existem 3: normal (todas as perguntas são feitas), server (somente perguntas do servidor são feitas) e global (somente perguntas globais são feitas).\nUso: ${prefixo}m modo`
+  `Altera o modo do bot. Atualmente existem 3: normal (todas as perguntas são feitas), server (somente perguntas do servidor são feitas) e global (somente perguntas globais são feitas).\nUso: ${prefixo}mode modo`
 );
 
 module.exports = help;
