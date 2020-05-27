@@ -14,7 +14,6 @@ const question = new Comando(
     const id = pattrid.exec(textoMensagem);
 
     const servidor = await ServidorService.tentaCriarEObterOuPadrao(msg.guild.id);
-    const timeout = servidor.tempo_para_responder;
 
     let resposta;
     if (id) {
@@ -36,12 +35,27 @@ const question = new Comando(
       util.criaMensagemEmbarcada('Você prefere...', `🅰️ ${pergunta.opcao_um}\n🅱️ ${pergunta.opcao_dois}`)
     );
 
+    const filter = (reaction) => reaction.emoji.name === '🅰️' || reaction.emoji.name === '🅱️';
+    const collector = mensagemPergunta.createReactionCollector(filter, { time: servidor.tempo_para_responder * 1000, max: 1000 });
+
     await mensagemPergunta.react('🅰️');
     await mensagemPergunta.react('🅱️');
 
-    setTimeout(() => {
-      const votosUm = mensagemPergunta.reactions.resolve('🅰️').count - 1;
-      const votosDois = mensagemPergunta.reactions.resolve('🅱️').count - 1;
+    collector.on('collect', async (reaction, user) => {
+      if (reaction.me) {
+        return;
+      }
+
+      const outraReacao = reaction.emoji.name === '🅰️' ? mensagemPergunta.reactions.resolve('🅱️') : mensagemPergunta.reactions.resolve('🅰️');
+      const usuarioReagiu = await outraReacao.users.resolve(user.id);
+      if (usuarioReagiu) {
+        outraReacao.users.remove(user.id);
+      }
+    });
+
+    collector.on('end', (collected) => {
+      const votosUm = collected.get('🅰️').count - 1;
+      const votosDois = collected.get('🅱️').count - 1;
 
       const novoTotalUm = pergunta.votos_opcao_um + votosUm;
       const novoTotalDois = pergunta.votos_opcao_dois + votosDois;
@@ -58,7 +72,7 @@ const question = new Comando(
             `'${pergunta.opcao_um}' tem ${porcentagemVotosUm}% dos votos (no total) e '${pergunta.opcao_dois}' tem ${porcentagemVotosDois}%`
         )
       );
-    }, timeout * 1000);
+    });
   },
 
   'question (ou q)',

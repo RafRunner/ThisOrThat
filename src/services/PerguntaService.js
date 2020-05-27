@@ -18,7 +18,7 @@ module.exports = {
       const paginas = Math.ceil(count['count(*)'] / pageSize);
 
       return { sucesso: true, perguntas, paginas };
-    } catch (e) {
+    } catch {
       return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar as perguntas...' };
     }
   },
@@ -39,10 +39,13 @@ module.exports = {
   async getRandonQuestion(servidor) {
     try {
       let count = connection('pergunta');
-      if (servidor.somente_perguntas_servidor) {
-        count = count.where('id_servidor', servidor.id);
-      } else if (servidor.somente_perguntas_globais) {
+      if (servidor.somente_perguntas_globais) {
         count = count.whereNull('id_servidor');
+      } else {
+        count = count.where('id_servidor', servidor.id_servidor);
+        if (!servidor.somente_perguntas_servidor) {
+          count = count.orWhereNull('id_servidor');
+        }
       }
       count = await count.count().first();
       count = count['count(*)'];
@@ -52,15 +55,18 @@ module.exports = {
 
       const numeroSelecionado = Math.floor(Math.random() * count);
 
-      let perguntaSelecionada = connection('pergunta');
-      if (servidor.somente_perguntas_servidor) {
-        perguntaSelecionada = perguntaSelecionada.where('id_servidor', servidor.id);
-      } else if (servidor.somente_perguntas_globais) {
-        perguntaSelecionada = perguntaSelecionada.whereNull('id_servidor');
+      let pergunta = connection('pergunta');
+      if (servidor.somente_perguntas_globais) {
+        pergunta = pergunta.whereNull('id_servidor');
+      } else {
+        pergunta = pergunta.where('id_servidor', servidor.id_servidor);
+        if (!servidor.somente_perguntas_servidor) {
+          pergunta = pergunta.orWhereNull('id_servidor');
+        }
       }
-      perguntaSelecionada = await perguntaSelecionada.orderBy('id').offset(numeroSelecionado).first();
+      pergunta = await pergunta.orderBy('id').offset(numeroSelecionado).first();
 
-      return { sucesso: true, pergunta: perguntaSelecionada };
+      return { sucesso: true, pergunta };
     } catch {
       return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar as perguntas...' };
     }
