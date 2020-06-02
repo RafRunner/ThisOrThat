@@ -36,13 +36,13 @@ const question = new Comando(
     );
 
     const filter = (reaction) => reaction.emoji.name === '🅰️' || reaction.emoji.name === '🅱️';
-    const collector = mensagemPergunta.createReactionCollector(filter, { time: servidor.tempo_para_responder * 1000, max: 1000 });
+    const collector = mensagemPergunta.createReactionCollector(filter, { time: servidor.tempo_para_responder * 1000, max: 1000, dispose: true });
 
     await mensagemPergunta.react('🅰️');
     await mensagemPergunta.react('🅱️');
 
     collector.on('collect', async (reaction, user) => {
-      if (reaction.me) {
+      if (user.id === mensagemPergunta.author.id) {
         return;
       }
 

@@ -10,16 +10,16 @@ const help = new Comando(
 
   async (msg, textoMensagem) => {
     const pattrTempo = /\d+/g;
-    const novoTempo = pattrTempo.exec(textoMensagem)[0];
+    const novoTempo = pattrTempo.exec(textoMensagem);
 
     if (!novoTempo) {
       msg.channel.send(util.criaMensagemEmbarcadaErro(`Uso incorreto do comando! Uso: ${prefixo}t tempo_em_segundos`));
       return;
     }
 
-    const resultado = await ServidorService.createAndUpdate(msg.guild.id, { tempo_para_responder: novoTempo });
+    const resultado = await ServidorService.createIfNotExistsAndUpdate(msg.guild.id, { tempo_para_responder: novoTempo[0] });
     if (resultado.sucesso) {
-      msg.channel.send(util.criaMensagemEmbarcada('Tempo atualizado', 'O tempo para responder foi atualizado para ' + novoTempo + ' segundos'));
+      msg.channel.send(util.criaMensagemEmbarcada('Tempo atualizado', 'O tempo para responder foi atualizado para ' + novoTempo[0] + ' segundos'));
     } else {
       msg.channel.send(util.criaMensagemEmbarcadaErro('Mensagem: ' + resultado.erro, 'Erro ao atualizar dados do servidor!'));
     }

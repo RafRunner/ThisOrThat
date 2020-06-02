@@ -36,28 +36,24 @@ const listQuestions = new Comando(
     }
 
     let page = 0;
-    let nAnteriorReacoesProxima = 1;
-    let nAnteriorReacoesAnterior = 1;
+
+    const filter = (reaction) => reaction.emoji.name === '◀️' || reaction.emoji.name === '▶️';
+    const collector = mensagemPerguntas.createReactionCollector(filter, { time: 180 * 1000, max: 1000, dispose: true });
 
     await mensagemPerguntas.react('◀️');
     await mensagemPerguntas.react('▶️');
 
-    const timer = setInterval(async () => {
-      const nAtualReacoesProxima = mensagemPerguntas.reactions.resolve('▶️').count;
-      const nAtualReacoesAnterior = mensagemPerguntas.reactions.resolve('◀️').count;
-
-      if (nAtualReacoesProxima === nAnteriorReacoesProxima && nAtualReacoesAnterior === nAnteriorReacoesAnterior) {
+    const mudarPagina = async (reaction, user) => {
+      if (user.id === mensagemPerguntas.author.id) {
         return;
       }
-      if (nAtualReacoesProxima !== nAnteriorReacoesProxima) {
-        nAnteriorReacoesProxima = nAtualReacoesProxima;
+
+      if (reaction.emoji.name === '▶️') {
         if (page + 1 === resposta.paginas) {
           return;
         }
         page++;
-      }
-      if (nAtualReacoesAnterior !== nAnteriorReacoesAnterior) {
-        nAnteriorReacoesAnterior = nAtualReacoesAnterior;
+      } else {
         if (page === 0) {
           return;
         }
@@ -69,9 +65,10 @@ const listQuestions = new Comando(
       if (novaResposta.sucesso) {
         mensagemPerguntas.edit(montaMensagemPerguntas(`Peguntas (página ${page + 1}/${resposta.paginas}):`, novaResposta.perguntas));
       }
-    }, 100);
+    };
 
-    setTimeout(() => clearInterval(timer), 120 * 1000);
+    collector.on('collect', (reaction, user) => mudarPagina(reaction, user));
+    collector.on('remove', (reaction, user) => mudarPagina(reaction, user));
   },
 
   'listQuestions (ou lq)',

@@ -12,13 +12,13 @@ const help = new Comando(
 
   async (msg, textoMensagem) => {
     const pattrModo = /\w+/g;
-    let novoModo = textoMensagem.match(pattrModo)[1];
+    let novoModo = textoMensagem.match(pattrModo);
 
     if (!novoModo) {
       msg.channel.send(util.criaMensagemEmbarcadaErro(`Uso: ${prefixo}m modo`, 'Uso incorreto do comando! '));
       return;
     }
-    novoModo = novoModo.toLowerCase();
+    novoModo = novoModo[1].toLowerCase();
     if (modos.indexOf(novoModo) === -1) {
       msg.channel.send(util.criaMensagemEmbarcadaErro(`Modos existentes: ${modos}`, 'Modo inválido!'));
       return;
@@ -31,7 +31,7 @@ const help = new Comando(
       camposAlterados.somente_perguntas_globais = true;
     }
 
-    const resultado = await ServidorService.createAndUpdate(msg.guild.id, camposAlterados);
+    const resultado = await ServidorService.createIfNotExistsAndUpdate(msg.guild.id, camposAlterados);
     if (resultado.sucesso) {
       msg.channel.send(util.criaMensagemEmbarcada('Modo atualizado', 'O modo do bot foi atualizado para ' + novoModo));
     } else {
