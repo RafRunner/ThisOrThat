@@ -5,7 +5,7 @@ const { prefixo } = require('../constantes');
 const util = require('../util');
 const ServidorService = require('../services/ServidorService');
 
-const help = new Comando(
+const timeout = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'timeout', 't'),
 
   async (msg, textoMensagem) => {
@@ -30,4 +30,4 @@ const help = new Comando(
   `Altera por quanto tempo (em segundos) uma pergunta poderá ser respondida antes dos resultados serem mostrados.\nUso: ${prefixo}timeOut tempo_em_segundos`
 );
 
-module.exports = help;
+module.exports = timeout;

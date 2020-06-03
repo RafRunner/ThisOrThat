@@ -7,7 +7,7 @@ const ServidorService = require('../services/ServidorService');
 
 const modos = ['normal', 'server', 'global'];
 
-const help = new Comando(
+const mode = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'mode', 'm'),
 
   async (msg, textoMensagem) => {
@@ -44,4 +44,4 @@ const help = new Comando(
   `Altera o modo do bot. Atualmente existem 3: normal (todas as perguntas são feitas), server (somente perguntas do servidor são feitas) e global (somente perguntas globais são feitas).\nUso: ${prefixo}mode modo`
 );
 
-module.exports = help;
+module.exports = mode;

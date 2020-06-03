@@ -5,7 +5,7 @@ const { prefixo } = require('../constantes');
 const util = require('../util');
 const ServidorService = require('../services/ServidorService');
 
-const help = new Comando(
+const serverStatus = new Comando(
   (textoMensagem) => util.textoEhComando(textoMensagem, 'serverstatus', 'ss'),
 
   async (msg, textoMensagem) => {
@@ -31,4 +31,4 @@ const help = new Comando(
   `Mostra as configurações atuais do bot no servidor`
 );
 
-module.exports = help;
+module.exports = serverStatus;
