@@ -28,14 +28,12 @@ module.exports = {
 
   async tentaCriarEObterOuPadrao(id_servidor) {
     if (!(await this.exists(id_servidor))) {
-      if (!(await this.registrar(id_servidor))) {
-        return await this.getServidorPadrao();
-      }
+      await this.registrar(id_servidor);
     }
 
     const resultado = await this.get(id_servidor);
     if (!resultado.sucesso) {
-      return await this.getServidorPadrao();
+      return this.getServidorPadrao();
     }
     return resultado.servidor;
   },
@@ -90,7 +88,7 @@ module.exports = {
   },
 
   async getServidorPadrao() {
-    return await this.get('padrao');
+    return this.get('padrao');
   },
 
   async delete(id_servidor) {

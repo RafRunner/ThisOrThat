@@ -69,7 +69,7 @@ const question = new Comando(
         util.criaMensagemEmbarcada(
           'O Resultado foi:',
           `**${pergunta.opcao_um}:** ${votosUm} votos\n**${pergunta.opcao_dois}**: ${votosDois} votos\n\n` +
-            `'${pergunta.opcao_um}' tem ${porcentagemVotosUm}% dos votos (no total) e '${pergunta.opcao_dois}' tem ${porcentagemVotosDois}%`
+            `"${pergunta.opcao_um}" tem ${novoTotalUm} votos no total (${porcentagemVotosUm}%) e "${pergunta.opcao_dois}" tem ${novoTotalDois} (${porcentagemVotosDois}%)`
         )
       );
     });

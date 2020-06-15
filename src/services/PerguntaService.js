@@ -41,8 +41,11 @@ module.exports = {
       let count = connection('pergunta');
       if (servidor.somente_perguntas_globais) {
         count = count.whereNull('id_servidor');
-      } else if (servidor.somente_perguntas_servidor) {
+      } else {
         count = count.where('id_servidor', servidor.id_servidor);
+        if (!servidor.somente_perguntas_servidor) {
+          count = count.orWhereNull('id_servidor');
+        }
       }
       count = await count.count().first();
       count = count['count(*)'];
@@ -55,8 +58,11 @@ module.exports = {
       let pergunta = connection('pergunta');
       if (servidor.somente_perguntas_globais) {
         pergunta = pergunta.whereNull('id_servidor');
-      } else if (servidor.somente_perguntas_servidor) {
+      } else {
         pergunta = pergunta.where('id_servidor', servidor.id_servidor);
+        if (!servidor.somente_perguntas_servidor) {
+          pergunta = pergunta.orWhereNull('id_servidor');
+        }
       }
       pergunta = await pergunta.orderBy('id').offset(numeroSelecionado).first();
 
