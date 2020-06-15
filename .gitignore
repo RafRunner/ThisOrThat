@@ -1,2 +1,3 @@
 /node_modules
 credenciais.json
+/src/database/db.sqlite

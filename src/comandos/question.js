@@ -49,7 +49,7 @@ const question = new Comando(
       const outraReacao = reaction.emoji.name === '🅰️' ? mensagemPergunta.reactions.resolve('🅱️') : mensagemPergunta.reactions.resolve('🅰️');
       const usuarioReagiu = await outraReacao.users.resolve(user.id);
       if (usuarioReagiu) {
-        outraReacao.users.remove(user.id);
+        outraReacao.users.remove(user.id).catch((e) => console.log('Error removing reaction: ', e));
       }
     });
 
