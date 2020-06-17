@@ -4,23 +4,25 @@ const Comando = require('./Comando');
 const { prefixo } = require('../constantes');
 const util = require('../util');
 const ServidorService = require('../services/ServidorService');
+const locale = require('../locale/locale');
+const { usoIncorretoDoComando } = require('../locale/locale');
 
 const modos = ['normal', 'server', 'global'];
 
 const mode = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'mode', 'm'),
 
-  async (msg, textoMensagem) => {
-    const pattrModo = /\w+/g;
+  async (msg, textoMensagem, servidor) => {
+    const pattrModo = /^\w+$/g;
     let novoModo = textoMensagem.match(pattrModo);
 
     if (!novoModo) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(`Uso: ${prefixo}m modo`, 'Uso incorreto do comando! '));
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale, usoIncorretoDoComando(servidor.locale), locale.usoMode(servidor.locale, { prefixo })));
       return;
     }
-    novoModo = novoModo[1].toLowerCase();
+    novoModo = novoModo[0].toLowerCase();
     if (modos.indexOf(novoModo) === -1) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(`Modos existentes: ${modos}`, 'Modo inválido!'));
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.modoInvalido(servidor.locale), locale.modosExistentes(servidor.locale, { modos })));
       return;
     }
 
@@ -31,17 +33,21 @@ const mode = new Comando(
       camposAlterados.somente_perguntas_globais = true;
     }
 
-    const resultado = await ServidorService.createIfNotExistsAndUpdate(msg.guild.id, camposAlterados);
+    const resultado = await ServidorService.update(servidor.id_servidor, camposAlterados);
     if (resultado.sucesso) {
-      msg.channel.send(util.criaMensagemEmbarcada('Modo atualizado', 'O modo do bot foi atualizado para ' + novoModo));
+      msg.channel.send(
+        util.criaMensagemEmbarcada(locale.modoAtualizado(servidor.locale), locale.mensagemModoAtualizado(servidor.locale, { novoModo }))
+      );
     } else {
-      msg.channel.send(util.criaMensagemEmbarcadaErro('Mensagem: ' + resultado.erro, 'Erro ao atualizar dados do servidor!'));
+      msg.channel.send(
+        util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), locale.mensagemErro(servidor.locale, { resultado }))
+      );
     }
   },
 
-  'mode (ou m)',
+  'mode (m)',
 
-  `Altera o modo do bot. Atualmente existem 3: normal (todas as perguntas são feitas), server (somente perguntas do servidor são feitas) e global (somente perguntas globais são feitas).\nUso: ${prefixo}mode modo`
+  (loc) => locale.descricaoMode(loc, { prefixo })
 );
 
 module.exports = mode;

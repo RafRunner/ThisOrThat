@@ -1,34 +1,32 @@
 'use strict';
 
 const Comando = require('./Comando');
-const { prefixo } = require('../constantes');
 const util = require('../util');
-const ServidorService = require('../services/ServidorService');
+const locale = require('../locale/locale');
 
 const serverStatus = new Comando(
   (textoMensagem) => util.textoEhComando(textoMensagem, 'serverstatus', 'ss'),
 
-  async (msg, textoMensagem) => {
-    const servidor = await ServidorService.tentaCriarEObterOuPadrao(msg.guild.id);
-
+  async (msg, textoMensagem, servidor) => {
     let modo;
     if (servidor.somente_perguntas_servidor) {
-      modo = 'server, só serão feitas perguntas criadas nesse servidor';
+      modo = locale.explicacaoSomenteServidor(servidor.locale);
     } else if (servidor.somente_perguntas_globais) {
-      modo = 'global, só serão feitas perguntas do reposit´prio global do bot, perguntas que você criou não são feitas a menos que pedidas pelo id';
+      modo = locale.explicacaoSomenteGlobal(servidor.locale);
     } else {
-      modo = 'normal, todas as perguntas são feitas, porém as que você criou no seu server podem demorar a aparecer!';
+      modo = locale.explicacaoNormal(servidor.locale);
     }
 
-    const mensagemEmbarcada = util.criaMensagemEmbarcada('Configurações atuais do servidor:', '');
-    mensagemEmbarcada.addField('Tempo para responder as perguntas (timeout):', servidor.tempo_para_responder + ' segundos');
-    mensagemEmbarcada.addField('Modo (quais perguntas serão feitas):', modo);
+    const mensagemEmbarcada = util.criaMensagemEmbarcada(locale.tituloConfiguracoesServidor(servidor.locale), '');
+    mensagemEmbarcada.addField(locale.tituloTimeOut(servidor.locale), servidor.tempo_para_responder + locale.segundos(servidor.locale));
+    mensagemEmbarcada.addField(locale.tituloModo(servidor.locale), modo);
+    mensagemEmbarcada.addField(locale.tituloLocale(servidor.locale), servidor.locale);
     msg.channel.send(mensagemEmbarcada);
   },
 
-  'serverStatus (ou ss)',
+  'serverStatus (ss)',
 
-  `Mostra as configurações atuais do bot no servidor`
+  (loc) => locale.descricaoServerStatus(loc)
 );
 
 module.exports = serverStatus;

@@ -1,6 +1,7 @@
 'use strict';
 
 const connection = require('../database/connection');
+const locale = require('../locale/locale');
 
 module.exports = {
   async get(id_servidor) {
@@ -8,8 +9,9 @@ module.exports = {
       const servidor = await connection('servidores').where('id_servidor', id_servidor).select('*').first();
 
       return { sucesso: true, servidor };
-    } catch {
-      return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar o servidor...' };
+    } catch (e) {
+      console.log('Erro ao obter servidor:\n', e);
+      return { sucesso: false };
     }
   },
 
@@ -21,7 +23,8 @@ module.exports = {
         return true;
       }
       return false;
-    } catch {
+    } catch (e) {
+      console.log('Erro ao conferir existência de um servidor:\n', e);
       return false;
     }
   },
@@ -38,21 +41,20 @@ module.exports = {
     return resultado.servidor;
   },
 
-  async createIfNotExistsAndUpdate(id_servidor, camposAlterados) {
+  async update(id_servidor, camposAlterados) {
     if (camposAlterados.tempo_para_responder && (camposAlterados.tempo_para_responder > 1800 || camposAlterados.tempo_para_responder < 10)) {
-      return { sucesso: false, erro: 'O tempo de timeout deve estar entre 10 e 1800 segundos' };
+      return { sucesso: false, erro: locale.limitesTimeout };
     }
     try {
       if (!(await this.exists(id_servidor))) {
-        if (!(await this.registrar(id_servidor))) {
-          return { sucesso: false, erro: 'Erro ao registrar o servidor' };
-        }
+        return { sucesso: false, erro: (l) => locale.erroAtualizarServidor('en-US') };
       }
       await connection('servidores').where('id_servidor', id_servidor).update(camposAlterados);
 
       return { sucesso: true, erro: null };
     } catch (erro) {
-      return { sucesso: false, erro: erro.message };
+      console.log('Erro ao atualizar servidor:\n', erro);
+      return { sucesso: false, erro: (l) => erro.message };
     }
   },
 
@@ -62,11 +64,11 @@ module.exports = {
         id_servidor,
       });
 
-      return { sucesso: true, mensagem: 'Servidor registrado com sucesso! Id: ' + id };
+      return { sucesso: true };
     } catch (e) {
-      const mensagem =
-        e.code === 'SQLITE_CONSTRAINT' ? 'Essa servidor já está cadastrado!' : 'Ocorreu um erro ao salvar o servidor... Erro: ' + e.message;
-      return { sucesso: false, mensagem: mensagem };
+      const mensagem = e.code === 'SQLITE_CONSTRAINT' ? 'Essa servidor já está cadastrado!' : 'Ocorreu um erro ao cadastrar o servidor:';
+      console.log(mensagem + '\n', e);
+      return { sucesso: false };
     }
   },
 
@@ -95,14 +97,14 @@ module.exports = {
     try {
       const servidor = await connection('servidores').where('id_servidor', id_servidor).select('id').first();
       if (!servidor) {
-        return { sucesso: false, mensagem: 'Esse servidor não existe!' };
+        return { sucesso: false, mensagem: locale.servidorNaoExiste('pt-BR') };
       }
 
       await connection('servidores').where('id', id).delete();
 
-      return { sucesso: true, mensagem: 'Servidor deletado com sucesso!' };
-    } catch {
-      return { sucesso: false, mensagem: 'Ocorreu um erro ao deletar o servidor... Tente novamente mais tarde!' };
+      return { sucesso: true, mensagem: 'Servidor deletado com suceeso' };
+    } catch (e) {
+      return { sucesso: false, mensagem: 'Erro ao deletar o servidor: ' + e.message };
     }
   },
 };

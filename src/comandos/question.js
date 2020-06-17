@@ -2,37 +2,38 @@
 
 const Comando = require('./Comando');
 const PerguntaService = require('../services/PerguntaService');
-const ServidorService = require('../services/ServidorService');
 const { prefixo } = require('../constantes');
 const util = require('../util');
+const locale = require('../locale/locale');
 
 const question = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'question', 'q'),
 
-  async (msg, textoMensagem) => {
-    const pattrid = /\d+/g;
+  async (msg, textoMensagem, servidor) => {
+    const pattrid = /^\d+$/g;
     const id = pattrid.exec(textoMensagem);
-
-    const servidor = await ServidorService.tentaCriarEObterOuPadrao(msg.guild.id);
+    console.log(textoMensagem);
 
     let resposta;
     if (id) {
       resposta = await PerguntaService.get(id[0], servidor.id_servidor);
-    } else if (util.textoEhComando(textoMensagem, 'question', 'q')) {
+    } else if (textoMensagem === '') {
       resposta = await PerguntaService.getRandonQuestion(servidor);
     } else {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(`Uso: ${prefixo}q ou ${prefixo}q id_da_pergunta`, 'Uso incorreto do comando!'));
+      msg.channel.send(
+        util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoQuestion(servidor.locale, { prefixo }))
+      );
       return;
     }
 
     if (!resposta.sucesso) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(resposta.mensagem));
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erro(servidor.locale), resposta.mensagem(servidor.locale)));
       return;
     }
 
     const pergunta = resposta.pergunta;
     const mensagemPergunta = await msg.channel.send(
-      util.criaMensagemEmbarcada('Você prefere...', `🅰️ ${pergunta.opcao_um}\n🅱️ ${pergunta.opcao_dois}`)
+      util.criaMensagemEmbarcada(locale.vocePrefere(servidor.locale), `🅰️ ${pergunta.opcao_um}\n🅱️ ${pergunta.opcao_dois}`)
     );
 
     const filter = (reaction) => reaction.emoji.name === '🅰️' || reaction.emoji.name === '🅱️';
@@ -49,7 +50,7 @@ const question = new Comando(
       const outraReacao = reaction.emoji.name === '🅰️' ? mensagemPergunta.reactions.resolve('🅱️') : mensagemPergunta.reactions.resolve('🅰️');
       const usuarioReagiu = await outraReacao.users.resolve(user.id);
       if (usuarioReagiu) {
-        outraReacao.users.remove(user.id).catch((e) => console.log('Error removing reaction: ', e));
+        outraReacao.users.remove(user.id).catch((e) => console.log('Erro removendo reação: ', e));
       }
     });
 
@@ -62,22 +63,29 @@ const question = new Comando(
 
       PerguntaService.updateVotos(pergunta, novoTotalUm, novoTotalDois);
 
-      const porcentagemVotosUm = ((novoTotalUm / (novoTotalUm + novoTotalDois)) * 100).toFixed(0);
-      const porcentagemVotosDois = 100 - porcentagemVotosUm;
+      const porcentagemVotosUm = ((novoTotalUm / (novoTotalUm + novoTotalDois)) * 100).toFixed(2);
+      const porcentagemVotosDois = (100 - porcentagemVotosUm).toFixed(2);
 
       msg.channel.send(
         util.criaMensagemEmbarcada(
-          'O Resultado foi:',
-          `**${pergunta.opcao_um}:** ${votosUm} votos\n**${pergunta.opcao_dois}**: ${votosDois} votos\n\n` +
-            `"${pergunta.opcao_um}" tem ${novoTotalUm} votos no total (${porcentagemVotosUm}%) e "${pergunta.opcao_dois}" tem ${novoTotalDois} (${porcentagemVotosDois}%)`
+          locale.oResultadoFoi(servidor.locale),
+          locale.resultadoPergunta(servidor.locale, {
+            pergunta,
+            votosUm,
+            votosDois,
+            novoTotalUm,
+            porcentagemVotosUm,
+            novoTotalDois,
+            porcentagemVotosDois,
+          })
         )
       );
     });
   },
 
-  'question (ou q)',
+  'question (q)',
 
-  `Será feita uma pergunta com duas opções (🅰️ e 🅱️). Reaja com uma dessas opções para votar. Opicinal: adicione o id da pergunta depois do comando para escolher uma pergunta`
+  (loc) => locale.descricaoQuestion(loc)
 );
 
 module.exports = question;

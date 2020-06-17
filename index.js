@@ -27,8 +27,8 @@ client.on('guildCreate', async (guild) => {
   ServidorService.registrar(guild.id);
 });
 
-client.on('guildDelete', (guild) => {
-  ServidorService.delete(guild.id);
+client.on('guildDelete', async (guild) => {
+  console.log(await ServidorService.delete(guild.id));
 });
 
 client.on('message', (msg) => {

@@ -3,31 +3,23 @@
 const Comando = require('./Comando');
 const { prefixo } = require('../constantes');
 const util = require('../util');
+const locale = require('../locale/locale');
 
 const help = new Comando(
   (textoMensagem) => util.textoEhComando(textoMensagem, 'help', 'h'),
 
-  async (msg, textoMensagem) => {
-    const mensagemEmbarcada = util.criaMensagemEmbarcada('Como usar o bot:', '');
-    mensagemEmbarcada.addField(
-      'O que é o ThisOrThat?',
-      'Ele é um bot que oferece situações onde as pessoas do servidor devem votar em um entre dois cenários propostos por perguntas feitas pelo bot!'
-    );
-    mensagemEmbarcada.addField(
-      'Como faço para o bot fazer um pergunta?',
-      `Basta usar o comando ${prefixo}q, o bot fara uma pergunta e você deve votar atravez das reações 🅰️ ou 🅱️, depois de um tempo o bot irá enviar uma mensagem com os resultados`
-    );
-    mensagemEmbarcada.addField(
-      'Posso criar minhas própriar perguntas?',
-      `Claro! Basta usar o comando ${prefixo}nq, porém essa pergunta só irá aparecer nesse servidor. Você também só pode deletar e listar perguntas desse servidor`
-    );
-    mensagemEmbarcada.addField('O que mais posso fazer?', `Para uma lista compelta de comandos e suas explicações, use o comando ${prefixo}c`);
+  async (msg, textoMensagem, servidor) => {
+    const mensagemEmbarcada = util.criaMensagemEmbarcada(locale.comoUsarOBot(servidor.locale), '');
+    mensagemEmbarcada.addField(locale.oQueEOThisOrThat(servidor.locale), locale.respostaOQueEOThisOrThat(servidor.locale));
+    mensagemEmbarcada.addField(locale.comoFazerPergunta(servidor.locale), locale.respostaComoFazerPergunta(servidor.locale, { prefixo }));
+    mensagemEmbarcada.addField(locale.possoCriarPerguntas(servidor.locale), locale.respostaCriarPergutnas(servidor.locale, { prefixo }));
+    mensagemEmbarcada.addField(locale.oQueMaisFazer(servidor.locale), locale.respostaOQueMaisFazer(servidor.locale, { prefixo }));
     msg.channel.send(mensagemEmbarcada);
   },
 
   '',
 
-  ''
+  (loc) => ''
 );
 
 module.exports = help;

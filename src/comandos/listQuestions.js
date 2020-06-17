@@ -3,10 +3,10 @@
 const Comando = require('./Comando');
 const PerguntaService = require('../services/PerguntaService');
 const util = require('../util');
+const locale = require('../locale/locale');
 
-function montaMensagemPerguntas(titulo, perguntas) {
-  const reducer = (acumulador, pergunta) =>
-    acumulador + '**Id: ' + pergunta.id + '** - Você prefere "' + pergunta.opcao_um + '" ou "' + pergunta.opcao_dois + '"?\n\n';
+function montaMensagemPerguntas(titulo, perguntas, servidor) {
+  const reducer = (acumulador, pergunta) => acumulador + locale.acumuladorPergunta(servidor.locale, { pergunta });
   const conteudo = perguntas.reduce(reducer, '');
   return util.criaMensagemEmbarcada(titulo, conteudo);
 }
@@ -14,21 +14,21 @@ function montaMensagemPerguntas(titulo, perguntas) {
 const listQuestions = new Comando(
   (textoMensagem) => util.textoEhComando(textoMensagem, 'listquestions', 'lq'),
 
-  async (msg, textoMensagem) => {
-    const resposta = await PerguntaService.getAllpaginado(0, msg.guild.id);
+  async (msg, textoMensagem, servidor) => {
+    const resposta = await PerguntaService.getAllpaginado(0, servidor.id_servidor);
 
     if (!resposta.sucesso) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(resposta.mensagem));
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erro(servidor.locale), resposta.mensagem(servidor.locale)));
       return;
     }
 
     if (resposta.paginas === 0) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro('Esse servidor ainda não tem nenhuma pergunta cadastrada!', 'Cadastre novas perguntas!'));
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.servidorSemPerguntas(servidor.locale), locale.cadastreNovasPerguntas(servidor.locale)));
       return;
     }
 
     const mensagemPerguntas = await msg.channel.send(
-      montaMensagemPerguntas(`Perguntas do servidor (página 1/${resposta.paginas}):`, resposta.perguntas)
+      montaMensagemPerguntas(locale.listagemPaginas(servidor.locale, { page: 0, resposta }), resposta.perguntas, servidor)
     );
 
     if (resposta.paginas === 1) {
@@ -60,10 +60,10 @@ const listQuestions = new Comando(
         page--;
       }
 
-      const novaResposta = await PerguntaService.getAllpaginado(page, msg.guild.id);
+      const novaResposta = await PerguntaService.getAllpaginado(page, servidor.id_servidor);
 
       if (novaResposta.sucesso) {
-        mensagemPerguntas.edit(montaMensagemPerguntas(`Peguntas (página ${page + 1}/${resposta.paginas}):`, novaResposta.perguntas));
+        mensagemPerguntas.edit(montaMensagemPerguntas(locale.listagemPaginas(servidor.locale, { page, resposta }), novaResposta.perguntas, servidor));
       }
     };
 
@@ -71,9 +71,9 @@ const listQuestions = new Comando(
     collector.on('remove', (reaction, user) => mudarPagina(reaction, user));
   },
 
-  'listQuestions (ou lq)',
+  'listQuestions (lq)',
 
-  `Comando para listar todas as perguntas desse servidor.`
+  (loc) => locale.descricaoListQuestions(loc)
 );
 
 module.exports = listQuestions;

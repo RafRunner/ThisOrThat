@@ -4,26 +4,29 @@ const Comando = require('./Comando');
 const { prefixo } = require('../constantes');
 const PerguntaService = require('../services/PerguntaService');
 const util = require('../util');
+const locale = require('../locale/locale');
 
 const deleteQuestion = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'deletequestion', 'dq'),
 
-  async (msg, textoMensagem) => {
-    const pattrid = /\d+/g;
+  async (msg, textoMensagem, servidor) => {
+    const pattrid = /^\d+$/g;
     const id = pattrid.exec(textoMensagem);
 
     if (!id) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(`Uso: ${prefixo}dq id_da_pergunta`, 'Uso incorreto do comando! '));
+      msg.channel.send(
+        util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoDeleteQuestion(servidor.locale, { prefixo }))
+      );
       return;
     }
 
-    const resposta = await PerguntaService.delete(id[0], msg.guild.id);
-    msg.channel.send(util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem));
+    const resposta = await PerguntaService.delete(id[0], servidor.id_servidor);
+    msg.channel.send(util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem(servidor.locale), servidor));
   },
 
-  'deleteQuestion (ou dq)',
+  'deleteQuestion (dq)',
 
-  `Comando para deletar uma pergunta. Deve ser seguido do id da pergunta. Para ver os ids e as perguntas use ${prefixo}listQuestion.\nUso: ${prefixo}deleteQuestion id_da_pergunta`
+  (loc) => locale.descricaoDeleteQuestion(loc, { prefixo })
 );
 
 module.exports = deleteQuestion;

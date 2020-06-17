@@ -1,6 +1,22 @@
 'use strict';
 
 const connection = require('../database/connection');
+const locale = require('../locale/locale');
+
+function buildRandomQuestionQuerry(servidor) {
+  let querry = connection('pergunta').where((querry) => querry.where('locale', servidor.locale).orWhereNull('locale'));
+  if (servidor.somente_perguntas_globais) {
+    querry = querry.whereNull('id_servidor');
+  } else {
+    querry = querry.andWhere((querry) => {
+      querry.where('id_servidor', servidor.id_servidor);
+      if (!servidor.somente_perguntas_servidor) {
+        querry = querry.orWhereNull('id_servidor');
+      }
+    });
+  }
+  return querry;
+}
 
 module.exports = {
   async getAllpaginado(page, id_servidor) {
@@ -18,8 +34,9 @@ module.exports = {
       const paginas = Math.ceil(count['count(*)'] / pageSize);
 
       return { sucesso: true, perguntas, paginas };
-    } catch {
-      return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar as perguntas...' };
+    } catch (e) {
+      console.log('Erro ao buscar perguntas paginadas:\n', e);
+      return { sucesso: false, mensagem: locale.erroBuscarPerguntas };
     }
   },
 
@@ -30,51 +47,35 @@ module.exports = {
       if (pergunta) {
         return { sucesso: true, pergunta };
       }
-      return { sucesso: false, mensagem: 'Pergunta não encontrada!' };
-    } catch {
-      return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar a pergunta...' };
+      return { sucesso: false, mensagem: locale.perguntaNaoEncontrada };
+    } catch (e) {
+      console.log('Eror ao buscar pergunta pelo id:\n', e);
+      return { sucesso: false, mensagem: locale.erroBuscarPergunta };
     }
   },
 
   async getRandonQuestion(servidor) {
     try {
-      let count = connection('pergunta');
-      if (servidor.somente_perguntas_globais) {
-        count = count.whereNull('id_servidor');
-      } else {
-        count = count.where('id_servidor', servidor.id_servidor);
-        if (!servidor.somente_perguntas_servidor) {
-          count = count.orWhereNull('id_servidor');
-        }
-      }
-      count = await count.count().first();
+      let count = await buildRandomQuestionQuerry(servidor).count().first();
       count = count['count(*)'];
       if (count === 0) {
-        return { sucesso: false, mensagem: 'Nenhuma pergunta encontrada! Cadastre uma pergunta ou mude o modo do bot' };
+        return { sucesso: false, mensagem: locale.nenhumaPerguntaEncontrada };
       }
 
       const numeroSelecionado = Math.floor(Math.random() * count);
 
-      let pergunta = connection('pergunta');
-      if (servidor.somente_perguntas_globais) {
-        pergunta = pergunta.whereNull('id_servidor');
-      } else {
-        pergunta = pergunta.where('id_servidor', servidor.id_servidor);
-        if (!servidor.somente_perguntas_servidor) {
-          pergunta = pergunta.orWhereNull('id_servidor');
-        }
-      }
-      pergunta = await pergunta.orderBy('id').offset(numeroSelecionado).first();
+      const pergunta = await buildRandomQuestionQuerry(servidor).orderBy('id').offset(numeroSelecionado).first();
 
       return { sucesso: true, pergunta };
-    } catch {
-      return { sucesso: false, mensagem: 'Ocorreu um erro ao buscar as perguntas...' };
+    } catch (e) {
+      console.log('Erro ao buscar pergunta aleatórioa:\n', e);
+      return { sucesso: false, mensagem: locale.erroBuscarPerguntas };
     }
   },
 
   async create(primeiraOpcao, segundaOpcao, id_servidor) {
     if (primeiraOpcao.length > 255 || segundaOpcao.length > 255) {
-      return { sucesso: false, mensagem: 'As opções devem ter no máximo 255 caracteres!' };
+      return { sucesso: false, mensagem: locale.limiteCaracteresPergunta };
     }
 
     try {
@@ -84,9 +85,10 @@ module.exports = {
         id_servidor: id_servidor,
       });
 
-      return { sucesso: true, mensagem: 'Pergunta criada com sucesso! Id: ' + id };
+      return { sucesso: true, mensagem: locale.perguntaCriadaComSucesso, id };
     } catch (e) {
-      const mensagem = e.code === 'SQLITE_CONSTRAINT' ? 'Essa pergunta já está cadastrada!' : 'Ocorreu um erro ao salvar a pergunta...';
+      console.log('Erro ao criar pergunta:', e);
+      const mensagem = e.code === 'SQLITE_CONSTRAINT' ? locale.perguntaJaCadastrada : locale.erroCriarPergunta;
       return { sucesso: false, mensagem };
     }
   },
@@ -98,9 +100,10 @@ module.exports = {
         votos_opcao_dois: novoTotalDois,
       });
 
-      return { sucesso: true, mensagem: 'Pegunta atualizada com sucesso!' };
-    } catch {
-      return { sucesso: false, mensagem: 'Ocorreu um erro ao atualizar a pergunta...' };
+      return { sucesso: true };
+    } catch (e) {
+      console.log('Erro ao atualizar resultados da pergunta:\n', e);
+      return { sucesso: false };
     }
   },
 
@@ -108,14 +111,15 @@ module.exports = {
     try {
       const pergunta = await connection('pergunta').where({ id, id_servidor }).select('id').first();
       if (!pergunta) {
-        return { sucesso: false, mensagem: 'Essa pergunta não existe ou não é desse servidor!' };
+        return { sucesso: false, mensagem: locale.perguntaNaoExiste };
       }
 
       await connection('pergunta').where('id', id).delete();
 
-      return { sucesso: true, mensagem: 'Pergunta deletada com sucesso!' };
-    } catch {
-      return { sucesso: false, mensagem: 'Ocorreu um erro ao deletar a pergunta... Tente novamente mais tarde!' };
+      return { sucesso: true, mensagem: locale.perguntaDeletada };
+    } catch (e) {
+      console.log('Erro ao deletar pergunta', e);
+      return { sucesso: false, mensagem: locale.erroDeletarPergunta };
     }
   },
 };
