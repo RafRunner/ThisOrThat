@@ -7,12 +7,11 @@ const util = require('../util');
 const locale = require('../locale/locale');
 
 const question = new Comando(
-  (textoMensagem) => util.textoComecaComComando(textoMensagem, 'question', 'q'),
+  (textoMensagem) => /^(question|q)(| \d+)$/gi.test(textoMensagem),
 
   async (msg, textoMensagem, servidor) => {
     const pattrid = /^\d+$/g;
     const id = pattrid.exec(textoMensagem);
-    console.log(textoMensagem);
 
     let resposta;
     if (id) {

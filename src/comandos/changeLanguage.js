@@ -6,18 +6,7 @@ const util = require('../util');
 const ServidorService = require('../services/ServidorService');
 const locale = require('../locale/locale');
 
-const localesValidos = (() => {
-  const linguas = locale.suportedLocales.keys();
-  const listaLocales = [];
-  while (true) {
-    const next = linguas.next();
-    if (next.done) {
-      break;
-    }
-    listaLocales.push(next.value);
-  }
-  return listaLocales;
-})();
+const localesValidos = Array.from(locale.suportedLocales.keys());
 
 const changeLanguage = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'changelanguage', 'cl'),

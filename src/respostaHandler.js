@@ -23,13 +23,9 @@ async function respostaHandler(msg) {
   comandos.forEach(async (comando) => {
     if (comando.funcaoMatch(textoMensagem)) {
       const servidor = await ServidorService.tentaCriarEObterOuPadrao(msg.guild.id);
-      const matchTextoSemComando = /(^\w+)(.+)/g.exec(textoMensagem);
+      const textoSemComando = (/^\w+ (.+)/g.exec(textoMensagem) || [0, ''])[1].trim();
 
-      if (matchTextoSemComando && matchTextoSemComando[2]) {
-        comando.funcaoExecuta(msg, matchTextoSemComando[2].trim(), servidor);
-        return;
-      }
-      comando.funcaoExecuta(msg, '', servidor);
+      comando.funcaoExecuta(msg, textoSemComando, servidor);
     }
   });
 }
