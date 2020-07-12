@@ -1,4 +1,4 @@
-'use-strict';
+'use strict';
 
 const pt_BR = require('./pt-BR');
 const en_US = require('./en-US');
