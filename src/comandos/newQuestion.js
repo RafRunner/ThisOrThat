@@ -10,11 +10,8 @@ const newQuestion = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'newquestion', 'nq'),
 
   async (msg, textoMensagem, servidor) => {
-    const pattrPrimeira = /(?<=^1-|^1 -).+(?=2 ?-)/g;
-    const pattrSegunda = /(?<=2-|2 -).+/g;
-
-    const primeiraOpcao = pattrPrimeira.exec(textoMensagem);
-    const segundaOpcao = pattrSegunda.exec(textoMensagem);
+    const primeiraOpcao = /(?<=^1-|^1 -).+(?=2 ?-)/g.exec(textoMensagem);
+    const segundaOpcao = /(?<=2-|2 -).+/g.exec(textoMensagem);
 
     if (!primeiraOpcao || !segundaOpcao) {
       msg.channel.send(

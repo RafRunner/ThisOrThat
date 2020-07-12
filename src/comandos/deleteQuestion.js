@@ -10,8 +10,7 @@ const deleteQuestion = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'deletequestion', 'dq'),
 
   async (msg, textoMensagem, servidor) => {
-    const pattrid = /^\d+$/g;
-    const id = pattrid.exec(textoMensagem);
+    const id = /^\d+$/g.exec(textoMensagem);
 
     if (!id) {
       msg.channel.send(

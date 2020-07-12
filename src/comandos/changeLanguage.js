@@ -12,8 +12,7 @@ const changeLanguage = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'changelanguage', 'cl'),
 
   async (msg, textoMensagem, servidor) => {
-    const pattrNewLocale = /^\w{2}-\w{2}$/g;
-    let novoLocale = textoMensagem.match(pattrNewLocale);
+    let novoLocale = /^\w{2}-\w{2}$/g.exec(textoMensagem);
 
     if (!novoLocale) {
       msg.channel.send(

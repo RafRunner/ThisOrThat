@@ -10,8 +10,7 @@ const timeout = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'timeout', 't'),
 
   async (msg, textoMensagem, servidor) => {
-    const pattrTempo = /^\d+$/g;
-    const novoTempo = pattrTempo.exec(textoMensagem);
+    const novoTempo = /^\d+$/g.exec(textoMensagem);
 
     if (!novoTempo) {
       msg.channel.send(

@@ -13,8 +13,7 @@ const mode = new Comando(
   (textoMensagem) => util.textoComecaComComando(textoMensagem, 'mode', 'm'),
 
   async (msg, textoMensagem, servidor) => {
-    const pattrModo = /^\w+$/g;
-    let novoModo = textoMensagem.match(pattrModo);
+    let novoModo = /^\w+$/g.exec(textoMensagem);
 
     if (!novoModo) {
       msg.channel.send(util.criaMensagemEmbarcadaErro(locale, usoIncorretoDoComando(servidor.locale), locale.usoMode(servidor.locale, { prefixo })));

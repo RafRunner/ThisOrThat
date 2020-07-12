@@ -21,11 +21,14 @@ module.exports = {
 
   textoEhComando(texto, comando, alias) {
     const t = texto.toLowerCase();
-    return t === comando || t === alias;
+    return { match: t === comando || t === alias, textoSemComando: '' };
   },
 
   textoComecaComComando(texto, comando, alias) {
-    const t = texto.toLowerCase();
-    return t.startsWith(comando) || t.startsWith(alias);
+    const match = new RegExp(`^(${comando}|${alias})(.*)$`, 'gi').exec(texto);
+    if (match) {
+      return { match: true, textoSemComando: match[2].trim() };
+    }
+    return { match: false, textoSemComando: '' };
   },
 };
