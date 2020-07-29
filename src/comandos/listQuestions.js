@@ -38,7 +38,7 @@ const listQuestions = new Comando(
     let page = 0;
 
     const filter = (reaction) => reaction.emoji.name === '◀️' || reaction.emoji.name === '▶️';
-    const collector = mensagemPerguntas.createReactionCollector(filter, { time: 180 * 1000, max: 1000, dispose: true });
+    const collector = mensagemPerguntas.createReactionCollector(filter, { time: 300 * 1000, max: 1000, dispose: true });
 
     await mensagemPerguntas.react('◀️');
     await mensagemPerguntas.react('▶️');
@@ -67,8 +67,8 @@ const listQuestions = new Comando(
       }
     };
 
-    collector.on('collect', (reaction, user) => mudarPagina(reaction, user));
-    collector.on('remove', (reaction, user) => mudarPagina(reaction, user));
+    collector.on('collect', mudarPagina);
+    collector.on('remove', mudarPagina);
   },
 
   'listQuestions (lq)',

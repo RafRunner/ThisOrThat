@@ -20,10 +20,9 @@ client.on('ready', () => {
 });
 
 client.on('guildCreate', async (guild) => {
-  if (await ServidorService.exists(guild.id)) {
-    return;
+  if (!(await ServidorService.exists(guild.id))) {
+    ServidorService.registrar(guild.id);
   }
-  ServidorService.registrar(guild.id);
 });
 
 client.on('guildDelete', async (guild) => {
