@@ -15,6 +15,7 @@ exports.down = function (knex) {
   return knex.schema
     .alterTable('pergunta', (table) => {
       table.dropForeign('id_servidor');
+      table.dropColumn('id_servidor');
       table.dropColumn('locale');
     })
     .alterTable('pergunta', (table) => {
