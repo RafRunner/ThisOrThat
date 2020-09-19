@@ -13,9 +13,7 @@ const deleteQuestion = new Comando(
     const id = /^\d+$/g.exec(textoMensagem);
 
     if (!id) {
-      msg.channel.send(
-        util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoDeleteQuestion(servidor.locale, { prefixo }))
-      );
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoDeleteQuestion(servidor.locale, { prefixo })));
       return;
     }
 

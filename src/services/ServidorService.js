@@ -3,6 +3,15 @@
 const connection = require('../database/connection');
 const locale = require('../locale/locale');
 
+const servidorPadrao = {
+  id: -1,
+  id_servidor: "padrao",
+  tempo_para_responder: 90,
+  somente_perguntas_servidor: 0,
+  somente_perguntas_globais: 0,
+  locale: locale.defaultLocale
+};
+
 module.exports = {
   async get(id_servidor) {
     try {
@@ -90,7 +99,7 @@ module.exports = {
   },
 
   async getServidorPadrao() {
-    return this.get('padrao');
+    return servidorPadrao;
   },
 
   async delete(id_servidor) {

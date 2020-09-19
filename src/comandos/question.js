@@ -30,9 +30,7 @@ const question = new Comando(
     }
 
     const pergunta = resposta.pergunta;
-    const mensagemPergunta = await msg.channel.send(
-      util.criaMensagemEmbarcada(locale.vocePrefere(servidor.locale), `🅰️ ${pergunta.opcao_um}\n🅱️ ${pergunta.opcao_dois}`)
-    );
+    const mensagemPergunta = await msg.channel.send(util.criaMensagemEmbarcada(locale.vocePrefere(servidor.locale), `🅰️ ${pergunta.opcao_um}\n🅱️ ${pergunta.opcao_dois}`));
 
     const filter = (reaction) => reaction.emoji.name === '🅰️' || reaction.emoji.name === '🅱️';
     const collector = mensagemPergunta.createReactionCollector(filter, { time: servidor.tempo_para_responder * 1000, max: 1000, dispose: true });
@@ -64,20 +62,7 @@ const question = new Comando(
       const porcentagemVotosUm = ((novoTotalUm / (novoTotalUm + novoTotalDois)) * 100).toFixed(2);
       const porcentagemVotosDois = (100 - porcentagemVotosUm).toFixed(2);
 
-      msg.channel.send(
-        util.criaMensagemEmbarcada(
-          locale.oResultadoFoi(servidor.locale),
-          locale.resultadoPergunta(servidor.locale, {
-            pergunta,
-            votosUm,
-            votosDois,
-            novoTotalUm,
-            porcentagemVotosUm,
-            novoTotalDois,
-            porcentagemVotosDois,
-          })
-        )
-      );
+      msg.channel.send(util.criaMensagemEmbarcada(locale.oResultadoFoi(servidor.locale),locale.resultadoPergunta(servidor.locale, { pergunta, votosUm, votosDois, novoTotalUm, porcentagemVotosUm, novoTotalDois, porcentagemVotosDois })));
     });
   },
 

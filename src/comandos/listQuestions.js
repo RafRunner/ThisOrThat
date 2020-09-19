@@ -27,9 +27,7 @@ const listQuestions = new Comando(
       return;
     }
 
-    const mensagemPerguntas = await msg.channel.send(
-      montaMensagemPerguntas(locale.listagemPaginas(servidor.locale, { page: 0, resposta }), resposta.perguntas, servidor)
-    );
+    const mensagemPerguntas = await msg.channel.send(montaMensagemPerguntas(locale.listagemPaginas(servidor.locale, { page: 0, resposta }), resposta.perguntas, servidor));
 
     if (resposta.paginas === 1) {
       return;

@@ -34,13 +34,9 @@ const mode = new Comando(
 
     const resultado = await ServidorService.update(servidor.id_servidor, camposAlterados);
     if (resultado.sucesso) {
-      msg.channel.send(
-        util.criaMensagemEmbarcada(locale.modoAtualizado(servidor.locale), locale.mensagemModoAtualizado(servidor.locale, { novoModo }))
-      );
+      msg.channel.send(util.criaMensagemEmbarcada(locale.modoAtualizado(servidor.locale), locale.mensagemModoAtualizado(servidor.locale, { novoModo })));
     } else {
-      msg.channel.send(
-        util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), locale.mensagemErro(servidor.locale, { resultado }))
-      );
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), locale.mensagemErro(servidor.locale, { resultado })));
     }
   },
 

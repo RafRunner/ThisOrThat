@@ -5,16 +5,20 @@ const locale = require('../locale/locale');
 
 function buildRandomQuestionQuerry(servidor) {
   let querry = connection('pergunta').where((querry) => querry.where('locale', servidor.locale).orWhereNull('locale'));
+
   if (servidor.somente_perguntas_globais) {
     querry = querry.whereNull('id_servidor');
-  } else {
+  }
+  else {
     querry = querry.andWhere((querry) => {
       querry.where('id_servidor', servidor.id_servidor);
+      
       if (!servidor.somente_perguntas_servidor) {
         querry = querry.orWhereNull('id_servidor');
       }
     });
   }
+
   return querry;
 }
 

@@ -15,16 +15,12 @@ const changeLanguage = new Comando(
     let novoLocale = /^\w{2}-\w{2}$/g.exec(textoMensagem);
 
     if (!novoLocale) {
-      msg.channel.send(
-        util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoLocale(servidor.locale, { prefixo, localesValidos }))
-      );
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoLocale(servidor.locale, { prefixo, localesValidos })));
       return;
     }
     novoLocale = novoLocale[0];
     if (localesValidos.indexOf(novoLocale) === -1) {
-      msg.channel.send(
-        util.criaMensagemEmbarcadaErro(locale.modoInvalido(servidor.locale), locale.localesExistentes(servidor.locale, { localesValidos }))
-      );
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.modoInvalido(servidor.locale), locale.localesExistentes(servidor.locale, { localesValidos })));
       return;
     }
 
@@ -34,9 +30,7 @@ const changeLanguage = new Comando(
     if (resultado.sucesso) {
       msg.channel.send(util.criaMensagemEmbarcada(locale.localeAtualizado(novoLocale), locale.mensagemLocaleAtualizado(novoLocale, { novoLocale })));
     } else {
-      msg.channel.send(
-        util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), locale.mensagemErro(servidor.locale, { resultado }))
-      );
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), locale.mensagemErro(servidor.locale, { resultado })));
     }
   },
 

@@ -14,9 +14,7 @@ const newQuestion = new Comando(
     const segundaOpcao = /(?<=2-|2 -).+/g.exec(textoMensagem);
 
     if (!primeiraOpcao || !segundaOpcao) {
-      msg.channel.send(
-        util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoNewQuestion(servidor.locale, { prefixo }))
-      );
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoNewQuestion(servidor.locale, { prefixo })));
       return;
     }
 

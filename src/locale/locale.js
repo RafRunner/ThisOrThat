@@ -4,6 +4,8 @@ const pt_BR = require('./pt-BR');
 const en_US = require('./en-US');
 const es_MX = require('./es-MX');
 
+const defaultLocale = 'en-US';
+
 const suportedLocales = new Map([
   ['pt-BR', pt_BR],
   ['en-US', en_US],
@@ -11,7 +13,7 @@ const suportedLocales = new Map([
 ]);
 
 function getVersaoCorreta(locale, nomeString, opcoes) {
-  locale = locale || 'en-US';
+  locale = locale || defaultLocale;
   const localeCorreto = suportedLocales.get(locale);
   return localeCorreto[nomeString](opcoes);
 }
@@ -114,4 +116,5 @@ module.exports = {
   sucesso: (locale, opcoes = null) => getVersaoCorreta(locale, 'sucesso', opcoes),
 
   suportedLocales,
+  defaultLocale
 };
