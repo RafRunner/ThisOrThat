@@ -11,6 +11,7 @@ const suportedLocales = new Map([
 ]);
 
 function getVersaoCorreta(locale, nomeString, opcoes) {
+  locale = locale || 'en-US';
   const localeCorreto = suportedLocales.get(locale);
   return localeCorreto[nomeString](opcoes);
 }
