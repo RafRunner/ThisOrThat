@@ -5,11 +5,11 @@ const locale = require('../locale/locale');
 
 const servidorPadrao = {
   id: -1,
-  id_servidor: "padrao",
+  id_servidor: 'padrao',
   tempo_para_responder: 90,
   somente_perguntas_servidor: 0,
   somente_perguntas_globais: 0,
-  locale: locale.defaultLocale
+  locale: locale.defaultLocale,
 };
 
 module.exports = {
@@ -83,8 +83,9 @@ module.exports = {
 
   async registrar(id_servidor) {
     let resultado = await this.create(id_servidor);
-
     let tentativas = 1;
+
+    console.log(`Tentando salvar servidor de id ${id_servidor} no banco de dados`);
     console.log('Tentativa de número ' + tentativas);
     console.log(resultado);
 
