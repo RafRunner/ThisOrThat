@@ -3,7 +3,6 @@
 module.exports = {
   // comandos:
   usoIncorretoDoComando: (opcoes) => 'Incorrect command use!',
-  mensagemErro: (opcoes) => 'Message: ' + opcoes.resultado.erro,
   erroAoAtualizarDadosServidor: (opcoes) => 'An error occurred updating server configurations!',
 
   // changeLocale:
@@ -101,7 +100,7 @@ module.exports = {
   // ServidorService:
   limitesTimeout: (opcoes) => 'The timeout time must be between 10 and 1800 seconds',
   servidorNaoCadastrado: (opcoes) => 'The server has not been registered! Try using this command again',
-  servidorNaoExiste: (opcoes) => 'This server doen´t exist!',
+  servidorNaoExiste: (opcoes) => 'This server doen´t exist (There was a problem registering it, try again or report the error please)',
 
   // respostaHandler:
   comandosExistentes: (opcoes) => 'Existing commands:',

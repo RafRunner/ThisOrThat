@@ -28,10 +28,7 @@ module.exports = {
     try {
       const id = await connection('servidores').where('id_servidor', id_servidor).select('id').first();
 
-      if (id) {
-        return true;
-      }
-      return false;
+      return id ? true : false;
     } catch (e) {
       console.log('Erro ao conferir existência de um servidor:\n', e);
       return false;
@@ -54,13 +51,11 @@ module.exports = {
     if (camposAlterados.tempo_para_responder && (camposAlterados.tempo_para_responder > 1800 || camposAlterados.tempo_para_responder < 10)) {
       return { sucesso: false, erro: locale.limitesTimeout };
     }
-    try {
-      if (!(await this.exists(id_servidor))) {
-        return { sucesso: false, erro: (l) => locale.erroAtualizarServidor('en-US') };
-      }
-      await connection('servidores').where('id_servidor', id_servidor).update(camposAlterados);
 
-      return { sucesso: true, erro: null };
+    try {
+      const servidorAtualizado = await connection('servidores').where('id_servidor', id_servidor).update(camposAlterados);
+
+      return servidorAtualizado ? { sucesso: true, erro: null } : { sucesso: false, erro: locale.servidorNaoExiste };
     } catch (erro) {
       console.log('Erro ao atualizar servidor:\n', erro);
       return { sucesso: false, erro: (l) => erro.message };
@@ -69,9 +64,7 @@ module.exports = {
 
   async create(id_servidor) {
     try {
-      const [id] = await connection('servidores').insert({
-        id_servidor,
-      });
+      const [id] = await connection('servidores').insert({ id_servidor });
 
       return { sucesso: true };
     } catch (e) {
@@ -89,7 +82,7 @@ module.exports = {
     console.log('Tentativa de número ' + tentativas);
     console.log(resultado);
 
-    while (!resultado.sucesso && tentativas < 11) {
+    while (!resultado.sucesso && tentativas <= 5) {
       resultado = await this.create(id_servidor);
       console.log('Tentativa de número ' + tentativas);
       console.log(resultado);
@@ -105,14 +98,9 @@ module.exports = {
 
   async delete(id_servidor) {
     try {
-      const servidor = await connection('servidores').where('id_servidor', id_servidor).select('id').first();
-      if (!servidor) {
-        return { sucesso: false, mensagem: locale.servidorNaoExiste('pt-BR') };
-      }
+      const servidorDeletado = await connection('servidores').where('id_servidor', id_servidor).delete();
 
-      await connection('servidores').where('id', id).delete();
-
-      return { sucesso: true, mensagem: 'Servidor deletado com suceeso' };
+      return servidorDeletado ? { sucesso: true, mensagem: 'Servidor deletado com suceeso' } : { sucesso: false, mensagem: locale.servidorNaoExiste('pt-BR') };
     } catch (e) {
       return { sucesso: false, mensagem: 'Erro ao deletar o servidor: ' + e.message };
     }

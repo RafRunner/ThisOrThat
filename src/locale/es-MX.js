@@ -3,7 +3,6 @@
 module.exports = {
   // comandos:
   usoIncorretoDoComando: (opcoes) => 'Uso incorrecto del mando!',
-  mensagemErro: (opcoes) => 'Mensaje: ' + opcoes.resultado.erro,
   erroAoAtualizarDadosServidor: (opcoes) => 'Error al actualizar datos del servidor!',
 
   // changeLocale:
@@ -101,7 +100,7 @@ module.exports = {
   // ServidorService:
   limitesTimeout: (opcoes) => 'El tiempo de timeout debe estar entre 10 y 1800 segundos',
   servidorNaoCadastrado: (opcoes) => 'El servidor no fue registrado! Intenta nuevamente',
-  servidorNaoExiste: (opcoes) => 'Ese servidor no existe!',
+  servidorNaoExiste: (opcoes) => 'Ese servidor no existe (Hubo un problema al registrarlo, vuelva a intentarlo o informe el error por favor)',
 
   // respostaHandler:
   comandosExistentes: (opcoes) => 'Mandos existentes:',

@@ -21,7 +21,6 @@ function getVersaoCorreta(locale, nomeString, opcoes) {
 module.exports = {
   // comandos:
   usoIncorretoDoComando: (locale, opcoes = null) => getVersaoCorreta(locale, 'usoIncorretoDoComando', opcoes),
-  mensagemErro: (locale, opcoes = null) => getVersaoCorreta(locale, 'mensagemErro', opcoes),
   erroAoAtualizarDadosServidor: (locale, opcoes = null) => getVersaoCorreta(locale, 'erroAoAtualizarDadosServidor', opcoes),
 
   // changeLocale:

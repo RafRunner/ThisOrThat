@@ -21,7 +21,7 @@ const timeout = new Comando(
     if (resultado.sucesso) {
       msg.channel.send(util.criaMensagemEmbarcada(locale.tempoAtualizado(servidor.locale), locale.mensagemTempoAtualizado(servidor.locale, { novoTempo })));
     } else {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), locale.mensagemErro(servidor.locale, { resultado })));
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), resultado.erro(servidor.locale)));
     }
   },
 

@@ -3,7 +3,6 @@
 module.exports = {
   // comandos:
   usoIncorretoDoComando: (opcoes) => 'Uso incorreto do comando!',
-  mensagemErro: (opcoes) => 'Mensagem: ' + opcoes.resultado.erro,
   erroAoAtualizarDadosServidor: (opcoes) => 'Erro ao atualizar dados do servidor!',
 
   // changeLocale:
@@ -101,7 +100,7 @@ module.exports = {
   // ServidorService:
   limitesTimeout: (opcoes) => 'O tempo de timeout deve estar entre 10 e 1800 segundos',
   servidorNaoCadastrado: (opcoes) => 'O servidor não foi cadastrado! Tente novamente',
-  servidorNaoExiste: (opcoes) => 'Esse servidor não existe!',
+  servidorNaoExiste: (opcoes) => 'Esse servidor não existe (Ocorreu um problema ao registrá-lo, tente novamente ou relate o erro por favor)',
 
   // respostaHandler:
   comandosExistentes: (opcoes) => 'Comandos existentes:',

@@ -30,7 +30,7 @@ const changeLanguage = new Comando(
     if (resultado.sucesso) {
       msg.channel.send(util.criaMensagemEmbarcada(locale.localeAtualizado(novoLocale), locale.mensagemLocaleAtualizado(novoLocale, { novoLocale })));
     } else {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), locale.mensagemErro(servidor.locale, { resultado })));
+      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), resultado.erro(servidor.locale)));
     }
   },
 

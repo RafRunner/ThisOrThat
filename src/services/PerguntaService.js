@@ -12,7 +12,7 @@ function buildRandomQuestionQuerry(servidor) {
   else {
     querry = querry.andWhere((querry) => {
       querry.where('id_servidor', servidor.id_servidor);
-      
+
       if (!servidor.somente_perguntas_servidor) {
         querry = querry.orWhereNull('id_servidor');
       }
@@ -46,12 +46,9 @@ module.exports = {
 
   async get(id, id_servidor) {
     try {
-      let pergunta = await connection('pergunta').where({ id, id_servidor }).first();
+      const pergunta = await connection('pergunta').where({ id, id_servidor }).first();
 
-      if (pergunta) {
-        return { sucesso: true, pergunta };
-      }
-      return { sucesso: false, mensagem: locale.perguntaNaoEncontrada };
+      return pergunta ? { sucesso: true, pergunta } : { sucesso: false, mensagem: locale.perguntaNaoEncontrada };
     } catch (e) {
       console.log('Eror ao buscar pergunta pelo id:\n', e);
       return { sucesso: false, mensagem: locale.erroBuscarPergunta };
@@ -113,14 +110,9 @@ module.exports = {
 
   async delete(id, id_servidor) {
     try {
-      const pergunta = await connection('pergunta').where({ id, id_servidor }).select('id').first();
-      if (!pergunta) {
-        return { sucesso: false, mensagem: locale.perguntaNaoExiste };
-      }
+      const perguntaDeletada = await connection('pergunta').where({ id, id_servidor }).delete();
 
-      await connection('pergunta').where('id', id).delete();
-
-      return { sucesso: true, mensagem: locale.perguntaDeletada };
+      return perguntaDeletada ? { sucesso: true, mensagem: locale.perguntaDeletada } : { sucesso: false, mensagem: locale.perguntaNaoExiste };
     } catch (e) {
       console.log('Erro ao deletar pergunta', e);
       return { sucesso: false, mensagem: locale.erroDeletarPergunta };
