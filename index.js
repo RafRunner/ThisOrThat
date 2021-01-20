@@ -5,12 +5,7 @@ const fs = require('fs');
 const respostaHandler = require('./src/respostaHandler');
 const ServidorService = require('./src/services/ServidorService');
 const { prefixo } = require('./src/constantes');
-
-function loadToken() {
-  const raw = fs.readFileSync('credenciais.json');
-  const credenciais = JSON.parse(raw);
-  return credenciais.token;
-}
+const token = require('./credenciais.json').token;
 
 const client = new Discord.Client();
 
@@ -31,4 +26,4 @@ client.on('guildDelete', async (guild) => {
 
 client.on('message', respostaHandler);
 
-client.login(loadToken());
+client.login(token);
