@@ -1,7 +1,6 @@
 'use strict';
 
 const Discord = require('discord.js');
-const fs = require('fs');
 const respostaHandler = require('./src/respostaHandler');
 const ServidorService = require('./src/services/ServidorService');
 const { prefixo } = require('./src/constantes');
