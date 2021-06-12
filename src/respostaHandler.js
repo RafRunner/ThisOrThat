@@ -15,13 +15,13 @@ async function respostaHandler(msg) {
 
   if (util.textoEhComando(textoMensagem, 'commands', 'c').match) {
     const servidor = await ServidorService.tentaCriarEObterOuPadrao(msg.guild.id);
-    const embed = montaMensagemComandos(comandos, servidor);
-    msg.channel.send(embed);
+    msg.channel.send(montaMensagemComandos(comandos, servidor));
     return;
   }
 
   comandos.forEach(async (comando) => {
     const matchComando = comando.funcaoMatch(textoMensagem);
+
     if (matchComando.match) {
       const servidor = await ServidorService.tentaCriarEObterOuPadrao(msg.guild.id);
       comando.funcaoExecuta(msg, matchComando.textoSemComando, servidor);
@@ -34,12 +34,14 @@ function montaMensagemComandos(comandos, servidor) {
     locale.comandosExistentes(servidor.locale),
     locale.avisoPrefixos(servidor.locale, { prefixo })
   );
+
   const reducer = (mensagemEmbarcada, comando) => {
     if (comando.nome) {
       return mensagemEmbarcada.addField(comando.nome + ':', comando.descricao(servidor.locale));
     }
     return mensagemEmbarcada;
   };
+
   comandos.reduce(reducer, mensagemEmbarcada);
   return mensagemEmbarcada;
 }
