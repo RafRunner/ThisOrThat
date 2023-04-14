@@ -18,9 +18,7 @@ const question = new Comando(
     } else if (textoMensagem === '') {
       resposta = await PerguntaService.getRandonQuestion(servidor);
     } else {
-      msg.channel.send(
-        util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoQuestion(servidor.locale, { prefixo }))
-      );
+      util.sendEmbededMessage(msg, locale.usoIncorretoDoComando(servidor.locale), locale.usoQuestion(servidor.locale, { prefixo }), false);
       return;
     }
 
