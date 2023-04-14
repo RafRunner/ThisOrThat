@@ -14,12 +14,12 @@ const newQuestion = new Comando(
     const segundaOpcao = /(?<=2-|2 -).+/g.exec(textoMensagem);
 
     if (!primeiraOpcao || !segundaOpcao) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoNewQuestion(servidor.locale, { prefixo })));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoNewQuestion(servidor.locale, { prefixo })) ] });
       return;
     }
 
     const resposta = await PerguntaService.create(primeiraOpcao[0].trim(), segundaOpcao[0].trim(), servidor.id_servidor);
-    msg.channel.send(util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem(servidor.locale, { id: resposta.id }), servidor));
+    msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem(servidor.locale, { id: resposta.id }), servidor) ] });
   },
 
   'newQuestion (nq)',

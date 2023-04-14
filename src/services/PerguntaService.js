@@ -8,9 +8,8 @@ function buildRandomQuestionQuerry(servidor) {
 
   if (servidor.somente_perguntas_globais) {
     querry = querry.whereNull('id_servidor');
-  }
-  else {
-    querry = querry.andWhere((querry) => {
+  } else {
+    querry = querry.where((querry) => {
       querry.where('id_servidor', servidor.id_servidor);
 
       if (!servidor.somente_perguntas_servidor) {

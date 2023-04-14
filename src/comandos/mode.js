@@ -16,12 +16,12 @@ const mode = new Comando(
     let novoModo = /^\w+$/g.exec(textoMensagem);
 
     if (!novoModo) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale, usoIncorretoDoComando(servidor.locale), locale.usoMode(servidor.locale, { prefixo })));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale, usoIncorretoDoComando(servidor.locale), locale.usoMode(servidor.locale, { prefixo })) ] });
       return;
     }
     novoModo = novoModo[0].toLowerCase();
     if (modos.indexOf(novoModo) === -1) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.modoInvalido(servidor.locale), locale.modosExistentes(servidor.locale, { modos })));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.modoInvalido(servidor.locale), locale.modosExistentes(servidor.locale, { modos })) ] });
       return;
     }
 
@@ -34,9 +34,9 @@ const mode = new Comando(
 
     const resultado = await ServidorService.update(servidor.id_servidor, camposAlterados);
     if (resultado.sucesso) {
-      msg.channel.send(util.criaMensagemEmbarcada(locale.modoAtualizado(servidor.locale), locale.mensagemModoAtualizado(servidor.locale, { novoModo })));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcada(locale.modoAtualizado(servidor.locale), locale.mensagemModoAtualizado(servidor.locale, { novoModo })) ] });
     } else {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), resultado.erro(servidor.locale)));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), resultado.erro(servidor.locale)) ] });
     }
   },
 

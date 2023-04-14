@@ -1,12 +1,21 @@
 'use strict';
 
-const Discord = require('discord.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 const respostaHandler = require('./src/respostaHandler');
 const ServidorService = require('./src/services/ServidorService');
 const { prefixo } = require('./src/constantes');
 const token = require('./credenciais.json').token;
 
-const client = new Discord.Client();
+const client = new Client({
+  intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.DirectMessages,
+      GatewayIntentBits.MessageContent,
+      GatewayIntentBits.GuildMessageReactions,
+  ],
+  partials: ['CHANNEL', 'MESSAGE'],
+});
 
 client.on('ready', () => {
   console.log(`Logado como: ${client.user.tag}`);
@@ -23,6 +32,6 @@ client.on('guildDelete', async (guild) => {
   console.log(await ServidorService.delete(guild.id));
 });
 
-client.on('message', respostaHandler);
+client.on('messageCreate', respostaHandler);
 
 client.login(token);

@@ -13,15 +13,15 @@ const timeout = new Comando(
     const novoTempo = /^\d+$/g.exec(textoMensagem);
 
     if (!novoTempo) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoTimeout(servidor.locale, { prefixo })));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoTimeout(servidor.locale, { prefixo })) ] });
       return;
     }
 
     const resultado = await ServidorService.update(servidor.id_servidor, { tempo_para_responder: novoTempo[0] });
     if (resultado.sucesso) {
-      msg.channel.send(util.criaMensagemEmbarcada(locale.tempoAtualizado(servidor.locale), locale.mensagemTempoAtualizado(servidor.locale, { novoTempo })));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcada(locale.tempoAtualizado(servidor.locale), locale.mensagemTempoAtualizado(servidor.locale, { novoTempo })) ] });
     } else {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), resultado.erro(servidor.locale)));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), resultado.erro(servidor.locale)) ] });
     }
   },
 

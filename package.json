@@ -9,7 +9,7 @@
   "author": "Rafael Nunes Santana",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^12.5.3",
+    "discord.js": "14.7.1",
     "knex": "^0.95.6",
     "sqlite3": "^5.0.2"
   },

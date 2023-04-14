@@ -18,10 +18,17 @@ const serverStatus = new Comando(
     }
 
     const mensagemEmbarcada = util.criaMensagemEmbarcada(locale.tituloConfiguracoesServidor(servidor.locale), '');
-    mensagemEmbarcada.addField(locale.tituloTimeOut(servidor.locale), servidor.tempo_para_responder + locale.segundos(servidor.locale));
-    mensagemEmbarcada.addField(locale.tituloModo(servidor.locale), modo);
-    mensagemEmbarcada.addField(locale.tituloLocale(servidor.locale), servidor.locale);
-    msg.channel.send(mensagemEmbarcada);
+
+    mensagemEmbarcada.addFields([
+      {
+        name: locale.tituloTimeOut(servidor.locale),
+        value: servidor.tempo_para_responder + locale.segundos(servidor.locale),
+      },
+      { name: locale.tituloModo(servidor.locale), value: modo },
+      { name: locale.tituloLocale(servidor.locale), value: servidor.locale },
+    ]);
+
+    msg.channel.send({ embeds: [ mensagemEmbarcada ] });
   },
 
   'serverStatus (ss)',

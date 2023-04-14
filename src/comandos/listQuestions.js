@@ -18,16 +18,16 @@ const listQuestions = new Comando(
     const resposta = await PerguntaService.getAllpaginado(0, servidor.id_servidor);
 
     if (!resposta.sucesso) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erro(servidor.locale), resposta.mensagem(servidor.locale)));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.erro(servidor.locale), resposta.mensagem(servidor.locale)) ] });
       return;
     }
 
     if (resposta.paginas === 0) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.servidorSemPerguntas(servidor.locale), locale.cadastreNovasPerguntas(servidor.locale)));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.servidorSemPerguntas(servidor.locale), locale.cadastreNovasPerguntas(servidor.locale)) ] });
       return;
     }
 
-    const mensagemPerguntas = await msg.channel.send(montaMensagemPerguntas(locale.listagemPaginas(servidor.locale, { page: 0, resposta }), resposta.perguntas, servidor));
+    const mensagemPerguntas = await msg.channel.send({ embeds: [ montaMensagemPerguntas(locale.listagemPaginas(servidor.locale, { page: 0, resposta }), resposta.perguntas, servidor) ] });
 
     if (resposta.paginas === 1) {
       return;

@@ -1,15 +1,25 @@
 'use strict';
 
-const Discord = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const locale = require('./locale/locale');
+
+function criaMensagemEmbarcada(titulo, descricao, cor) {
+  const embed = new EmbedBuilder().setColor(0x3477eb).setTitle(`**${titulo}**`);
+
+  if (descricao.toString().length > 0) {
+    embed.setDescription(descricao);
+  }
+
+  return embed;
+}
 
 module.exports = {
   criaMensagemEmbarcada(titulo, descricao) {
-    return new Discord.MessageEmbed().setTitle(`**${titulo}**`).setColor(0x3477eb).setDescription(descricao);
+    return criaMensagemEmbarcada(titulo, descricao, 0x3477eb);
   },
 
   criaMensagemEmbarcadaErro(titulo, descricao) {
-    return new Discord.MessageEmbed().setTitle(titulo).setColor(0xff0000).setDescription(descricao);
+    return criaMensagemEmbarcada(titulo, descricao, 0xff0000);
   },
 
   criaMensagemEmbarcadaResultado(sucesso, descricao, servidor) {

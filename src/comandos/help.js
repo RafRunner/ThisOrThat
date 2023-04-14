@@ -10,11 +10,29 @@ const help = new Comando(
 
   async (msg, textoMensagem, servidor) => {
     const mensagemEmbarcada = util.criaMensagemEmbarcada(locale.comoUsarOBot(servidor.locale), '');
-    mensagemEmbarcada.addField(locale.oQueEOThisOrThat(servidor.locale), locale.respostaOQueEOThisOrThat(servidor.locale));
-    mensagemEmbarcada.addField(locale.comoFazerPergunta(servidor.locale), locale.respostaComoFazerPergunta(servidor.locale, { prefixo }));
-    mensagemEmbarcada.addField(locale.possoCriarPerguntas(servidor.locale), locale.respostaCriarPergutnas(servidor.locale, { prefixo }));
-    mensagemEmbarcada.addField(locale.oQueMaisFazer(servidor.locale), locale.respostaOQueMaisFazer(servidor.locale, { prefixo }));
-    msg.channel.send(mensagemEmbarcada);
+
+    mensagemEmbarcada.addFields(
+      {
+        name: locale.oQueEOThisOrThat(servidor.locale),
+        value: locale.respostaOQueEOThisOrThat(servidor.locale),
+      },
+      {
+        name: locale.comoFazerPergunta(servidor.locale),
+        value: locale.respostaComoFazerPergunta(servidor.locale, { prefixo }),
+      },
+      {
+        name: locale.possoCriarPerguntas(servidor.locale),
+        value: locale.respostaCriarPergutnas(servidor.locale, { prefixo }),
+      },
+      {
+        name: locale.oQueMaisFazer(servidor.locale),
+        value: locale.respostaOQueMaisFazer(servidor.locale, { prefixo }),
+      }
+    );
+
+    msg.channel.send({
+      embeds: [mensagemEmbarcada],
+    });
   },
 
   '',

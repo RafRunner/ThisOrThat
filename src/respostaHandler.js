@@ -15,7 +15,7 @@ async function respostaHandler(msg) {
 
   if (util.textoEhComando(textoMensagem, 'commands', 'c').match) {
     const servidor = await ServidorService.tentaCriarEObterOuPadrao(msg.guild.id);
-    msg.channel.send(montaMensagemComandos(comandos, servidor));
+    msg.channel.send({ embeds: [ montaMensagemComandos(comandos, servidor) ] });
     return;
   }
 
@@ -37,7 +37,7 @@ function montaMensagemComandos(comandos, servidor) {
 
   const reducer = (mensagemEmbarcada, comando) => {
     if (comando.nome) {
-      return mensagemEmbarcada.addField(comando.nome + ':', comando.descricao(servidor.locale));
+      return mensagemEmbarcada.addFields([{name: comando.nome + ':', value: comando.descricao(servidor.locale)}]);
     }
     return mensagemEmbarcada;
   };

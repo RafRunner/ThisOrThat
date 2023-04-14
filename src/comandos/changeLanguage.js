@@ -15,12 +15,12 @@ const changeLanguage = new Comando(
     let novoLocale = /^\w{2}-\w{2}$/g.exec(textoMensagem);
 
     if (!novoLocale) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoLocale(servidor.locale, { prefixo, localesValidos })));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoLocale(servidor.locale, { prefixo, localesValidos })) ] });
       return;
     }
     novoLocale = novoLocale[0];
     if (localesValidos.indexOf(novoLocale) === -1) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.modoInvalido(servidor.locale), locale.localesExistentes(servidor.locale, { localesValidos })));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.modoInvalido(servidor.locale), locale.localesExistentes(servidor.locale, { localesValidos })) ] });
       return;
     }
 
@@ -28,9 +28,9 @@ const changeLanguage = new Comando(
 
     const resultado = await ServidorService.update(servidor.id_servidor, camposAlterados);
     if (resultado.sucesso) {
-      msg.channel.send(util.criaMensagemEmbarcada(locale.localeAtualizado(novoLocale), locale.mensagemLocaleAtualizado(novoLocale, { novoLocale })));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcada(locale.localeAtualizado(novoLocale), locale.mensagemLocaleAtualizado(novoLocale, { novoLocale })) ] });
     } else {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), resultado.erro(servidor.locale)));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.erroAoAtualizarDadosServidor(servidor.locale), resultado.erro(servidor.locale)) ] });
     }
   },
 

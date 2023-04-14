@@ -13,12 +13,12 @@ const deleteQuestion = new Comando(
     const id = /^\d+$/g.exec(textoMensagem);
 
     if (!id) {
-      msg.channel.send(util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoDeleteQuestion(servidor.locale, { prefixo })));
+      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoDeleteQuestion(servidor.locale, { prefixo })) ] });
       return;
     }
 
     const resposta = await PerguntaService.delete(id[0], servidor.id_servidor);
-    msg.channel.send(util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem(servidor.locale), servidor));
+    msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem(servidor.locale), servidor) ] });
   },
 
   'deleteQuestion (dq)',
