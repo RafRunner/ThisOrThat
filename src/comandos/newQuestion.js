@@ -7,24 +7,24 @@ const util = require('../util');
 const locale = require('../locale/locale');
 
 const newQuestion = new Comando(
-  (textoMensagem) => util.textoComecaComComando(textoMensagem, 'newquestion', 'nq'),
+    (textoMensagem) => util.textoComecaComComando(textoMensagem, 'newquestion', 'nq'),
 
-  async (msg, textoMensagem, servidor) => {
-    const primeiraOpcao = /(?<=^1-|^1 -).+(?=2 ?-)/g.exec(textoMensagem);
-    const segundaOpcao = /(?<=2-|2 -).+/g.exec(textoMensagem);
+    async (msg, textoMensagem, servidor) => {
+        const primeiraOpcao = /(?<=^1-|^1 -).+(?=2 ?-)/g.exec(textoMensagem);
+        const segundaOpcao = /(?<=2-|2 -).+/g.exec(textoMensagem);
 
-    if (!primeiraOpcao || !segundaOpcao) {
-      msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaErro(locale.usoIncorretoDoComando(servidor.locale), locale.usoNewQuestion(servidor.locale, { prefixo })) ] });
-      return;
-    }
+        if (!primeiraOpcao || !segundaOpcao) {
+            util.sendEmbed(msg, locale.usoIncorretoDoComando(servidor.locale), locale.usoNewQuestion(servidor.locale, { prefixo }), false);
+            return;
+        }
 
-    const resposta = await PerguntaService.create(primeiraOpcao[0].trim(), segundaOpcao[0].trim(), servidor.id_servidor);
-    msg.channel.send({ embeds: [ util.criaMensagemEmbarcadaResultado(resposta.sucesso, resposta.mensagem(servidor.locale, { id: resposta.id }), servidor) ] });
-  },
+        const resposta = await PerguntaService.create(primeiraOpcao[0].trim(), segundaOpcao[0].trim(), servidor.id_servidor, servidor.locale);
+        util.sendResultEmbed(msg, resposta.mensagem(servidor.locale, { id: resposta.id }), servidor, resposta.sucesso);
+    },
 
-  'newQuestion (nq)',
+    'newQuestion (nq)',
 
-  (loc) => locale.descricaoNewQuestion(loc, { prefixo })
+    (loc) => locale.descricaoNewQuestion(loc, { prefixo })
 );
 
 module.exports = newQuestion;

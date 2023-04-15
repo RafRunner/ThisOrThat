@@ -13,7 +13,7 @@ const deleteQuestion = new Comando(
         const id = /^\d+$/g.exec(textoMensagem);
 
         if (!id) {
-            util.sendEmbededMessage(
+            util.sendEmbed(
                 msg,
                 locale.usoIncorretoDoComando(servidor.locale),
                 locale.usoDeleteQuestion(servidor.locale, { prefixo }),
@@ -23,12 +23,7 @@ const deleteQuestion = new Comando(
         }
 
         const resposta = await PerguntaService.delete(id[0], servidor.id_servidor);
-        util.sendResultEmbededMessage(
-            msg,
-            resposta.mensagem(servidor.locale),
-            servidor,
-            resposta.sucesso
-        );
+        util.sendResultEmbed(msg, resposta.mensagem(servidor.locale), servidor, resposta.sucesso);
     },
 
     'deleteQuestion (dq)',

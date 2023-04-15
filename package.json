@@ -1,19 +1,19 @@
 {
-  "name": "thisorthat",
-  "version": "1.0.0",
-  "description": "Um bot de Discord que apresenta duas opções que são escolhidas pelos integrantes do servidor",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon index.js"
-  },
-  "author": "Rafael Nunes Santana",
-  "license": "MIT",
-  "dependencies": {
-    "discord.js": "14.7.1",
-    "knex": "^0.95.6",
-    "sqlite3": "^5.0.2"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.7"
-  }
+    "name": "thisorthat",
+    "version": "1.0.0",
+    "description": "Um bot de Discord que apresenta duas opções que são escolhidas pelos integrantes do servidor",
+    "main": "index.js",
+    "scripts": {
+        "start": "nodemon index.js"
+    },
+    "author": "Rafael Nunes Santana",
+    "license": "MIT",
+    "dependencies": {
+        "discord.js": "14.7.1",
+        "knex": "^2.4.2",
+        "sqlite3": "^5.0.2"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.7"
+    }
 }

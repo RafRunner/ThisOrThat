@@ -22,16 +22,18 @@ module.exports = {
         return criaMensagemEmbarcada(titulo, descricao, 0xff0000);
     },
 
-    sendEmbededMessage(msg, title, description, success = true) {
-        const messageBuilder = success
-            ? this.criaMensagemEmbarcada
-            : this.criaMensagemEmbarcadaErro;
-        msg.channel.send({ embeds: [messageBuilder(title, description)] });
+    sendEmbed(msg, title, description, success = true) {
+        const messageBuilder = success ? this.criaMensagemEmbarcada : this.criaMensagemEmbarcadaErro;
+        return msg.channel.send({ embeds: [messageBuilder(title, description)] });
     },
 
-    sendResultEmbededMessage(msg, description, server, success) {
+    sendBuiltEmbed(msg, embed) {
+        return msg.channel.send({ embeds: [embed] });
+    },
+
+    sendResultEmbed(msg, description, server, success) {
         const title = success ? locale.sucesso(server.locale) : locale.erro(server.locale);
-        this.sendEmbededMessage(msg, title, description, success);
+        return this.sendEmbed(msg, title, description, success);
     },
 
     textoEhComando(texto, comando, alias) {
