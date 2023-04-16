@@ -1,3 +1,4 @@
-/node_modules
+node_modules/
+.idea/
 credenciais.json
 /src/database/db.sqlite
