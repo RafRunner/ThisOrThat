@@ -6,7 +6,8 @@ module.exports = {
   erroAoAtualizarDadosServidor: (opcoes) => 'Error al actualizar datos del servidor!',
 
   // changeLocale:
-  usoLocale: (opcoes) => `Uso: ${opcoes.prefixo}cl nuevo_idioma. Idiomas compatibles: ${opcoes.localesValidos}`,
+  usoLocale: (opcoes) =>
+    `Uso: ${opcoes.prefixo}cl nuevo_idioma. Idiomas compatibles: ${opcoes.localesValidos}`,
   localesExistentes: (opcoes) => `Idiomas compatibles: ${opcoes.localesValidos}`,
   localeAtualizado: (opcoes) => 'Idioma actualizado!',
   mensagemLocaleAtualizado: (opcoes) => 'Idioma actualizado para: ' + opcoes.novoLocale,
@@ -30,14 +31,22 @@ module.exports = {
   respostaCriarPergutnas: (opcoes) =>
     `Por supuesto! Sólo tiene que utilizar el mando ${opcoes.prefixo}nq, pero esa pregunta sólo aparecerá en ese servidor. Tú también sólo puede eliminar y listar preguntas de ese servidor`,
   oQueMaisFazer: (opcoes) => 'Qué más puedo hacer?',
-  respostaOQueMaisFazer: (opcoes) => `Para una lista completa de mandos y sus explicaciones, utilice el mando ${opcoes.prefixo}c`,
+  respostaOQueMaisFazer: (opcoes) =>
+    `Para una lista completa de mandos y sus explicaciones, utilice el mando ${opcoes.prefixo}c`,
 
   // listQuestions:
   acumuladorPergunta: (opcoes) =>
-    '**Id: ' + opcoes.pergunta.id + '** - Tú prefiere "' + opcoes.pergunta.opcao_um + '" o "' + opcoes.pergunta.opcao_dois + '"?\n\n',
+    '**Id: ' +
+    opcoes.pergunta.id +
+    '** - Tú prefiere "' +
+    opcoes.pergunta.opcao_um +
+    '" o "' +
+    opcoes.pergunta.opcao_dois +
+    '"?\n\n',
   servidorSemPerguntas: (opcoes) => 'Ese servidor todavía no tiene ninguna pregunta registrada!',
   cadastreNovasPerguntas: (opcoes) => 'Registra nuevas preguntas!',
-  listagemPaginas: (opcoes) => `Preguntas del servidor (página ${opcoes.page + 1}/${opcoes.resposta.paginas}): `,
+  listagemPaginas: (opcoes) =>
+    `Preguntas del servidor (página ${opcoes.page + 1}/${opcoes.resposta.paginas}): `,
   descricaoListQuestions: (opcoes) => `Mando para listar todas las preguntas de ese servidor.`,
 
   // mode:
@@ -65,7 +74,8 @@ module.exports = {
     `Se hará una pregunta con dos opciones (🅰️ e 🅱️). Reacciona con una de estas opciones para votar. Opcional: añade el id de la pregunta después del mando para elegir una pregunta`,
 
   // serverStatus:
-  explicacaoSomenteServidor: (opcoes) => 'server, se hacen solamente preguntas creadas en el servidor',
+  explicacaoSomenteServidor: (opcoes) =>
+    'server, se hacen solamente preguntas creadas en el servidor',
   explicacaoSomenteGlobal: (opcoes) =>
     'global, se hacen solamente preguntas desde el repositorio global del bot, las preguntas que creaste no son hechas a menos que lo solicite la id',
   explicacaoNormal: (opcoes) =>
@@ -74,13 +84,15 @@ module.exports = {
   tituloTimeOut: (opcoes) => 'Tiempo para responder a las preguntas (timeout):',
   segundos: (opcoes) => ' segundos',
   tituloModo: (opcoes) => 'Modo (qué preguntas se harán):',
-  tituloLocale: (opcoes) => 'Idioma del servidor (solo se realizarán preguntas globales de este idioma):',
+  tituloLocale: (opcoes) =>
+    'Idioma del servidor (solo se realizarán preguntas globales de este idioma):',
   descricaoServerStatus: (opcoes) => `muestra la configuración actual del bot en el servidor`,
 
   // timeout:
   usoTimeout: (opcoes) => `Uso: ${opcoes.prefixo}t tiempo_en_segundos`,
   tempoAtualizado: (opcoes) => 'Tiempo actualizado',
-  mensagemTempoAtualizado: (opcoes) => 'El tiempo para responder fue actualizado para ' + opcoes.novoTempo[0] + ' segundos',
+  mensagemTempoAtualizado: (opcoes) =>
+    'El tiempo para responder fue actualizado para ' + opcoes.novoTempo[0] + ' segundos',
   descricaoTimeOut: (opcoes) =>
     `Cambiar por cuanto tiempo (en segundos) se puede responder una pregunta antes que se muestren los resultados.\nUso: ${opcoes.prefixo}timeOut tiempo_en_segundos`,
 
@@ -88,23 +100,27 @@ module.exports = {
   erroBuscarPerguntas: (opcoes) => 'Se Ocorrió un error al obtener las preguntas...',
   perguntaNaoEncontrada: (opcoes) => 'Pregunta no encontrada!',
   erroBuscarPergunta: (opcoes) => 'Se Ocorrió un error al obtener las preguntas...',
-  nenhumaPerguntaEncontrada: (opcoes) => 'No se encontraron preguntas! Registra una pregunta o cambie el modo del bot',
+  nenhumaPerguntaEncontrada: (opcoes) =>
+    'No se encontraron preguntas! Registra una pregunta o cambie el modo del bot',
   limiteCaracteresPergunta: (opcoes) => 'Las opciones deben tener un máximo de 255 caracteres.',
   perguntaCriadaComSucesso: (opcoes) => 'Pregunta creada con éxito! Id: ' + opcoes.id,
   perguntaJaCadastrada: (opcoes) => 'Esa pregunta yá está registrada!',
   erroCriarPergunta: (opcoes) => 'Se Ocorrió un error al crear la pregunta...',
   perguntaNaoExiste: (opcoes) => 'Esa pregunta no existe o no es de ese servidor!',
   perguntaDeletada: (opcoes) => 'Pregunta eliminada con éxito!',
-  erroDeletarPergunta: (opcoes) => 'Se Ocorrió un error al eliminar la pregunta... Intenta nuevamente más tarde!',
+  erroDeletarPergunta: (opcoes) =>
+    'Se Ocorrió un error al eliminar la pregunta... Intenta nuevamente más tarde!',
 
   // ServidorService:
   limitesTimeout: (opcoes) => 'El tiempo de timeout debe estar entre 10 y 1800 segundos',
   servidorNaoCadastrado: (opcoes) => 'El servidor no fue registrado! Intenta nuevamente',
-  servidorNaoExiste: (opcoes) => 'Ese servidor no existe (Hubo un problema al registrarlo, vuelva a intentarlo o informe el error por favor)',
+  servidorNaoExiste: (opcoes) =>
+    'Ese servidor no existe (Hubo un problema al registrarlo, vuelva a intentarlo o informe el error por favor)',
 
   // respostaHandler:
   comandosExistentes: (opcoes) => 'Mandos existentes:',
-  avisoPrefixos: (opcoes) => '**Todos los mandos deben estar precedidos del prefijo: "' + opcoes.prefixo + '"**',
+  avisoPrefixos: (opcoes) =>
+    '**Todos los mandos deben estar precedidos del prefijo: "' + opcoes.prefixo + '"**',
 
   // util:
   erro: (opcoes) => '**Error**',

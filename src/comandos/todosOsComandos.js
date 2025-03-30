@@ -10,6 +10,16 @@ const serverStatus = require('./serverStatus');
 const changeLanguage = require('./changeLanguage');
 const help = require('./help');
 
-const todosOsComandos = [question, newQuestion, listQuestions, deleteQuestion, timeout, mode, changeLanguage, serverStatus, help];
+const todosOsComandos = [
+  question,
+  newQuestion,
+  listQuestions,
+  deleteQuestion,
+  timeout,
+  mode,
+  changeLanguage,
+  serverStatus,
+  help,
+];
 
 module.exports = todosOsComandos;
