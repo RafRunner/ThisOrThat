@@ -31,7 +31,7 @@ const serverStatus = new Comando(
       { name: locale.tituloLocale(servidor.locale), value: servidor.locale },
     ]);
 
-    util.sendBuiltEmbed(mensagemEmbarcada);
+    util.sendBuiltEmbed(msg, mensagemEmbarcada);
   },
 
   'serverStatus (ss)',

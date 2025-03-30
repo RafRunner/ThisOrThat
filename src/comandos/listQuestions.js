@@ -34,6 +34,7 @@ const listQuestions = new Comando(
     }
 
     const mensagemPerguntas = await util.sendBuiltEmbed(
+      msg,
       montaMensagemPerguntas(
         locale.listagemPaginas(servidor.locale, { page: 0, resposta }),
         resposta.perguntas,

@@ -26,7 +26,7 @@ const mode = new Comando(
       return;
     }
     novoModo = novoModo[0].toLowerCase();
-    if (modos.indexOf(novoModo) === -1) {
+    if (!modos.includes(novoModo)) {
       util.sendEmbed(
         msg,
         locale.modoInvalido(servidor.locale),

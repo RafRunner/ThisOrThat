@@ -36,13 +36,17 @@ module.exports = {
     return this.sendEmbed(msg, title, description, success);
   },
 
-  textoEhComando(texto, comando, alias) {
+  textoEhComando(texto, ...aliases) {
     const t = texto.toLowerCase();
-    return { match: t === comando || t === alias, textoSemComando: '' };
+    return { match: aliases.includes(t), textoSemComando: '' };
   },
 
-  textoComecaComComando(texto, comando, alias) {
-    const match = new RegExp(`^(${comando}|${alias})(.*)$`, 'gi').exec(texto);
+  textoComecaComComando(texto, ...aliases) {
+    texto += ' ';
+
+    const regex = new RegExp(`^(${aliases.join('|')})\\s(.*)`, 'gi');
+    const match = regex.exec(texto);
+    // console.log(regex, JSON.stringify(texto), match);
     if (match) {
       return { match: true, textoSemComando: match[2].trim() };
     }

@@ -12,10 +12,14 @@ async function respostaHandler(msg) {
   }
 
   const textoMensagem = msg.content.substring(1).trim();
+  console.log(
+    `Mensagem recebida: "${textoMensagem}" no servidor '${msg.guild.name}' (${msg.guild.id}) \
+pelo usuário '${msg.author.username}' (${msg.author.id})`
+  );
 
   if (util.textoEhComando(textoMensagem, 'commands', 'c').match) {
     const servidor = await ServidorService.tentaCriarEObterOuPadrao(msg.guild.id);
-    util.sendBuiltEmbed(montaMensagemComandos(comandos, servidor));
+    util.sendBuiltEmbed(msg, montaMensagemComandos(comandos, servidor));
     return;
   }
 

@@ -32,6 +32,17 @@ client.on('guildDelete', async (guild) => {
   console.log(await ServidorService.delete(guild.id));
 });
 
-client.on('messageCreate', respostaHandler);
+client.on('messageCreate', async (msg) => {
+  if (msg.author.bot) {
+    return;
+  }
+
+  try {
+    await respostaHandler(msg);
+  } catch (error) {
+    console.error('Erro ao processar a mensagem:', error);
+    msg.reply('Ocorreu um erro ao processar sua mensagem.');
+  }
+});
 
 client.login(token);

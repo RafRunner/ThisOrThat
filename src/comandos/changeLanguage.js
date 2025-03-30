@@ -9,7 +9,8 @@ const locale = require('../locale/locale');
 const localesValidos = Array.from(locale.suportedLocales.keys());
 
 const changeLanguage = new Comando(
-  (textoMensagem) => util.textoComecaComComando(textoMensagem, 'changelanguage', 'cl'),
+  (textoMensagem) =>
+    util.textoComecaComComando(textoMensagem, 'changelanguage', 'cl', 'locale', 'l'),
 
   async (msg, textoMensagem, servidor) => {
     let novoLocale = /^\w{2}-\w{2}$/g.exec(textoMensagem);
@@ -23,8 +24,9 @@ const changeLanguage = new Comando(
       );
       return;
     }
-    novoLocale = novoLocale[0];
-    if (localesValidos.indexOf(novoLocale) === -1) {
+    novoLocale = novoLocale[0].toLowerCase();
+    const novoLocaleIndex = localesValidos.map((l) => l.toLowerCase()).indexOf(novoLocale);
+    if (novoLocaleIndex === -1) {
       util.sendEmbed(
         msg,
         locale.modoInvalido(servidor.locale),
@@ -33,6 +35,7 @@ const changeLanguage = new Comando(
       );
       return;
     }
+    novoLocale = localesValidos[novoLocaleIndex];
 
     const camposAlterados = { locale: novoLocale };
 
@@ -53,7 +56,7 @@ const changeLanguage = new Comando(
     }
   },
 
-  'changeLanguage (cl)',
+  'changeLanguage (cl), locale (l)',
 
   (loc) => locale.descricaoLocale(loc, { prefixo, localesValidos })
 );

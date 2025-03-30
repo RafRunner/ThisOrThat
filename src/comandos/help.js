@@ -30,7 +30,7 @@ const help = new Comando(
       }
     );
 
-    util.sendBuiltEmbed(mensagemEmbarcada);
+    util.sendBuiltEmbed(msg, mensagemEmbarcada);
   },
 
   '',
