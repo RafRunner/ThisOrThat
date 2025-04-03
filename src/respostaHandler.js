@@ -23,14 +23,15 @@ pelo usuário '${msg.author.username}' (${msg.author.id})`
     return;
   }
 
-  comandos.forEach(async (comando) => {
+  for (const comando of comandos) {
     const matchComando = comando.funcaoMatch(textoMensagem);
 
     if (matchComando.match) {
       const servidor = await ServidorService.tentaCriarEObterOuPadrao(msg.guild.id);
       comando.funcaoExecuta(msg, matchComando.textoSemComando, servidor);
+      break;
     }
-  });
+  }
 }
 
 function montaMensagemComandos(comandos, servidor) {
